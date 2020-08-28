@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://tomhht.github.io</id>
-    <title>Hello World</title>
-    <updated>2020-08-28T08:30:01.110Z</updated>
+    <title></title>
+    <updated>2020-08-28T08:36:40.447Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://tomhht.github.io"/>
     <link rel="self" href="https://tomhht.github.io/atom.xml"/>
     <logo>https://tomhht.github.io/images/avatar.png</logo>
     <icon>https://tomhht.github.io/favicon.ico</icon>
-    <rights>All rights reserved 2020, Hello World</rights>
+    <rights>All rights reserved 2020, </rights>
     <entry>
         <title type="html"><![CDATA[在Ubuntu 20.04上使用Kubeadm部署Kubernetes集群]]></title>
         <id>https://tomhht.github.io/post/zai-ubuntu-2004-shang-shi-yong-kubeadm-bu-shu-kubernetes-ji-qun/</id>
