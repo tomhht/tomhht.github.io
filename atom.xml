@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://tomhht.github.io</id>
     <title></title>
-    <updated>2020-08-28T08:48:07.655Z</updated>
+    <updated>2020-08-28T08:54:17.732Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://tomhht.github.io"/>
     <link rel="self" href="https://tomhht.github.io/atom.xml"/>
@@ -15,9 +15,9 @@
         <link href="https://tomhht.github.io/post/zai-ubuntu-2004-shang-shi-yong-kubeadm-bu-shu-kubernetes-ji-qun/">
         </link>
         <updated>2020-08-27T10:40:02.000Z</updated>
-        <summary type="html"><![CDATA[<p>Kubernetes, Kubeadm, Kubectl, Kubelet, Ubuntu, CentOS, Flannel, Docker, Aliyun, 阿里云</p>
+        <summary type="html"><![CDATA[<p>本文主要是踩坑后想记录下避坑方法，内容涉及Kubernetes, Kubeadm, Kubectl, Kubelet, Ubuntu, CentOS, Flannel, Docker, Aliyun, 阿里云。</p>
 ]]></summary>
-        <content type="html"><![CDATA[<p>Kubernetes, Kubeadm, Kubectl, Kubelet, Ubuntu, CentOS, Flannel, Docker, Aliyun, 阿里云</p>
+        <content type="html"><![CDATA[<p>本文主要是踩坑后想记录下避坑方法，内容涉及Kubernetes, Kubeadm, Kubectl, Kubelet, Ubuntu, CentOS, Flannel, Docker, Aliyun, 阿里云。</p>
 <!-- more -->
 <h1 id="写作背景">写作背景</h1>
 <p>初学Kubernetes，虽然网上资源很多，但没一个能彻底搞定，于是杂烩一下。</p>
