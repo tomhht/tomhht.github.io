@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://tomhht.github.io</id>
     <title>hello, world</title>
-    <updated>2020-08-30T10:12:03.819Z</updated>
+    <updated>2020-08-30T11:18:52.587Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://tomhht.github.io"/>
     <link rel="self" href="https://tomhht.github.io/atom.xml"/>
@@ -160,10 +160,10 @@ kubectl apply -f kube-flannel.yml
 未完待续...</p>
 <hr>
 <p>参考链接：<br>
-https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/<br>
-https://www.cnblogs.com/hellxz/p/use-kubeadm-init-kubernetes-cluster.html<br>
-https://blog.csdn.net/LeonardoYasuo/article/details/101483438<br>
-https://www.cnblogs.com/yinzhengjie/p/12258215.html</p>
+<a href="https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/"></a><br>
+<a href="https://www.cnblogs.com/hellxz/p/use-kubeadm-init-kubernetes-cluster.html"></a><br>
+<a href="https://blog.csdn.net/LeonardoYasuo/article/details/101483438"></a><br>
+<a href="https://www.cnblogs.com/yinzhengjie/p/12258215.html"></a></p>
 ]]></content>
     </entry>
 </feed>
