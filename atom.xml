@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://tomhht.github.io</id>
     <title>hello, world</title>
-    <updated>2020-08-31T04:33:26.764Z</updated>
+    <updated>2020-08-31T04:43:27.523Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://tomhht.github.io"/>
     <link rel="self" href="https://tomhht.github.io/atom.xml"/>
@@ -45,8 +45,9 @@ sudo update-grub2  #Ubuntu
 <p>初学Kubernetes，虽然网上资源很多，但没一个能彻底搞定，于是杂烩一下。</p>
 <h1 id="安装前的准备工作">安装前的准备工作</h1>
 <h2 id="创建k8s文件夹">创建k8s文件夹</h2>
-<p>存放安装过程所需文件。执行下面代码：<br>
-<code>mkdir ~/k8s</code></p>
+<p>存放安装过程所需文件。执行下面代码：</p>
+<pre><code>mkdir ~/k8s
+</code></pre>
 <h2 id="设置iptables">设置iptables</h2>
 <p>执行下面代码：</p>
 <pre><code>cat &lt;&lt;EOF | sudo tee /etc/sysctl.d/k8s.conf
@@ -56,12 +57,14 @@ EOF
 sudo sysctl --system
 </code></pre>
 <h2 id="打开端口">打开端口</h2>
-<p>先打开Ubuntu自带的防火墙ufw，因为ufw设置似乎更简单一些。执行下面代码：<br>
-<code>sudo ufw enable</code><br>
-执行后提示可能断开连接，直接y继续，别担心，ssh连接不会断。<br>
-如果使用ssh连接，还需要执行下面代码，以便打开ssh连接：<br>
-<code>sudo ufw allow ssh</code><br>
-接下来分别设置：</p>
+<p>先打开Ubuntu自带的防火墙ufw，因为ufw设置似乎更简单一些。执行下面代码：</p>
+<pre><code>sudo ufw enable
+</code></pre>
+<p>执行后提示可能断开连接，直接y继续，别担心，ssh连接不会断。<br>
+如果使用ssh连接，还需要执行下面代码，以便打开ssh连接：</p>
+<pre><code>sudo ufw allow ssh
+</code></pre>
+<p>接下来分别设置：</p>
 <ol>
 <li>控制节点 Control-plane nodes</li>
 </ol>
@@ -95,7 +98,7 @@ sudo apt-mark hold kubelet kubeadm kubectl
 <h2 id="准备工作">准备工作</h2>
 <h3 id="查看所需镜像">查看所需镜像</h3>
 <pre><code>kubeadm config images list
-#下面是执行后的结果
+#下面是执行的结果
 k8s.gcr.io/kube-apiserver:v1.18.8
 k8s.gcr.io/kube-controller-manager:v1.18.8
 k8s.gcr.io/kube-scheduler:v1.18.8
