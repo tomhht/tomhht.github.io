@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://tomhht.github.io</id>
     <title>hello, world</title>
-    <updated>2020-08-31T11:37:55.581Z</updated>
+    <updated>2020-08-31T12:04:34.336Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://tomhht.github.io"/>
     <link rel="self" href="https://tomhht.github.io/atom.xml"/>
@@ -35,7 +35,7 @@ sudo firewall-cmd --zone=public --add-port=30000-32767/tcp --permanent
 <h2 id="关闭端口">关闭端口</h2>
 <pre><code>sudo firewall-cmd --zone= public --remove-port=6443/tcp --permanent
 </code></pre>
-<h2 id="重载以便-permanent配置生效">重载以便--permanent配置生效</h2>
+<h2 id="reload以便-permanent配置生效">reload以便--permanent配置生效</h2>
 <pre><code>sudo firewall-cmd --reload
 </code></pre>
 <h1 id="ubuntu">Ubuntu</h1>
@@ -126,7 +126,8 @@ sudo sed -i 's/.*swap.*/#&amp;/' /etc/fstab  #永久禁用swap
 <p>可通过<code>free -m</code>来检查禁用效果。</p>
 <h1 id="安装kubeadm-kubelet和kubectl">安装kubeadm, kubelet和kubectl</h1>
 <blockquote>
-<p>control node（控制节点）、worker node（工作节点） 上都安装。</p>
+<p>control node（控制节点）、worker node（工作节点） 上都安装。<br>
+<strong>Ubuntu代码</strong></p>
 </blockquote>
 <pre><code>sudo apt-get update &amp;&amp; sudo apt-get install -y apt-transport-https curl
 curl -s https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg | sudo apt-key add -
@@ -136,6 +137,26 @@ EOF
 sudo apt-get update
 sudo apt-get install -y kubelet kubeadm kubectl
 sudo apt-mark hold kubelet kubeadm kubectl
+</code></pre>
+<p><strong>CentOS代码</strong></p>
+<pre><code>cat &lt;&lt;EOF | sudo tee /etc/yum.repos.d/kubernetes.repo
+[kubernetes]
+name=Kubernetes
+baseurl=https://mirrors.aliyun.com/yum/repos/kubernetes-el7-x86_64
+enabled=1
+gpgcheck=0
+repo_gpgcheck=0
+gpgkey=https:/mirrors.aliyun.com/yum/doc/yum-key.gpg https://mirrors.aliyun.com/yum/doc/rpm-package-key.gpg
+exclude=kubelet kubeadm kubectl
+EOF
+
+# Set SELinux in permissive mode (effectively disabling it)
+sudo setenforce 0
+sudo sed -i 's/^SELINUX=enforcing$/SELINUX=permissive/' /etc/selinux/config
+
+sudo yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes
+
+sudo systemctl enable --now kubelet
 </code></pre>
 <h1 id="在control-node控制节点上用kubeadm创建集群">在control node控制节点上用kubeadm创建集群</h1>
 <p>由于种种原因，国内无法从k8s.gcr.io下载到kubeadm部署所需的文件，以下方法将通过阿里云获取。</p>
