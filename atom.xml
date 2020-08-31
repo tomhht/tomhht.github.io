@@ -2,13 +2,50 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://tomhht.github.io</id>
     <title>hello, world</title>
-    <updated>2020-08-31T11:37:21.394Z</updated>
+    <updated>2020-08-31T11:37:55.581Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://tomhht.github.io"/>
     <link rel="self" href="https://tomhht.github.io/atom.xml"/>
     <logo>https://tomhht.github.io/images/avatar.png</logo>
     <icon>https://tomhht.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, hello, world</rights>
+    <entry>
+        <title type="html"><![CDATA[Ubuntu和CentOS端口设置]]></title>
+        <id>https://tomhht.github.io/post/ubuntu-he-centos-duan-kou-she-zhi/</id>
+        <link href="https://tomhht.github.io/post/ubuntu-he-centos-duan-kou-she-zhi/">
+        </link>
+        <updated>2020-08-31T09:53:59.000Z</updated>
+        <summary type="html"><![CDATA[<p>记录下端口设置，用到啥记录啥。</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>记录下端口设置，用到啥记录啥。</p>
+<!-- more -->
+<h1 id="centos">CentOS</h1>
+<p>核心指令<code>firewall-cmd</code></p>
+<h2 id="查看已开放端口">查看已开放端口</h2>
+<pre><code>sudo firewall-cmd --list-ports
+</code></pre>
+<h2 id="开启端口">开启端口</h2>
+<pre><code>sudo firewall-cmd --zone=public --add-port=10250/tcp --permanent
+sudo firewall-cmd --zone=public --add-port=30000-32767/tcp --permanent
+//--zone: 作用域 
+//--add-port=2181/tcp: 要开启的端口号，格式为：端口号/通讯协议 
+//--permanent: 使端口永久开放，如不添加，则表示临时有效，开机重启后便会失效
+//30000-32767，端口区间
+</code></pre>
+<h2 id="关闭端口">关闭端口</h2>
+<pre><code>sudo firewall-cmd --zone= public --remove-port=6443/tcp --permanent
+</code></pre>
+<h2 id="重载以便-permanent配置生效">重载以便--permanent配置生效</h2>
+<pre><code>sudo firewall-cmd --reload
+</code></pre>
+<h1 id="ubuntu">Ubuntu</h1>
+<p>核心指令<code>ufw</code></p>
+<hr>
+<p>参考链接：<br>
+<a href="https://www.cnblogs.com/Sungeek/p/8257681.html">https://www.cnblogs.com/Sungeek/p/8257681.html</a><br>
+<a href="https://blog.csdn.net/Sun_Hui_/article/details/103178840">https://blog.csdn.net/Sun_Hui_/article/details/103178840</a></p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Ubuntu和CentOS修改grub]]></title>
         <id>https://tomhht.github.io/post/ubuntu-he-centos-xiu-gai-grub/</id>
