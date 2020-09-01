@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://tomhht.github.io</id>
     <title>hello, world</title>
-    <updated>2020-09-01T09:06:40.802Z</updated>
+    <updated>2020-09-01T09:29:28.461Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://tomhht.github.io"/>
     <link rel="self" href="https://tomhht.github.io/atom.xml"/>
@@ -218,9 +218,23 @@ sudo yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes
 sudo systemctl enable --now kubelet
 </code></pre>
 <h1 id="在control-node控制节点上用kubeadm创建集群">在control node控制节点上用kubeadm创建集群</h1>
+<h2 id="方法一推荐能成功就很幸运">方法一（推荐，能成功就很幸运）</h2>
+<pre><code>kubeadm init --apiserver-advertise-address=你的本机IP \
+--pod-network-cidr=10.244.0.0/16 \
+--kubernetes-version=v1.18.8 \
+--image-repository=registry.cn-hangzhou.aliyuncs.com/google_containers
+//--image-repository指定从阿里云拉取所需镜像
+#如果安装失败，再试几次，都失败则尝试方法二。
+#如果安装成功，则输出类似下面内容，将内容中的`kubeadm join ...`单独保存出来，这是其他节点加入主节点的信息。跳过方法二。
+...
+...
+kubeadm join 192.168.127.132:6443 --token 4pwz11.1m0u1k3ak3ibgx08 \
+    --discovery-token-ca-cert-hash sha256:671404c4f80afe5d06d8eefcd5acc6049c4d84f1ebf1091b09bc180ea44e79b7   
+</code></pre>
+<h2 id="方法二只在方法一失败的情况下使用">方法二（只在方法一失败的情况下使用）</h2>
 <p>由于种种原因，国内无法从k8s.gcr.io下载到kubeadm部署所需的文件，以下方法将通过阿里云获取。</p>
-<h2 id="准备工作">准备工作</h2>
-<h3 id="查看所需镜像">查看所需镜像</h3>
+<h3 id="准备工作">准备工作</h3>
+<h4 id="查看所需镜像">查看所需镜像</h4>
 <pre><code>kubeadm config images list
 #下面是执行的结果
 k8s.gcr.io/kube-apiserver:v1.18.8
@@ -231,12 +245,12 @@ k8s.gcr.io/pause:3.2
 k8s.gcr.io/etcd:3.4.3-0
 k8s.gcr.io/coredns:1.6.7
 </code></pre>
-<h3 id="在阿里云控制台找到所需镜像">在阿里云控制台找到所需镜像</h3>
+<h4 id="在阿里云控制台找到所需镜像">在阿里云控制台找到所需镜像</h4>
 <ol>
 <li><a href="https://cr.console.aliyun.com/">https://cr.console.aliyun.com/</a>  左侧点”镜像搜索“</li>
 <li>分别搜索”kube-apiserver“等所有名称，点开搜索到的镜像，一定找到正确的版本号（如v1.18.8）（日期越新的越容易找到），复制页面中的”公网地址“</li>
 </ol>
-<h3 id="pull镜像-打标签-移除无用镜像">pull镜像、打标签、移除无用镜像</h3>
+<h4 id="pull镜像-打标签-移除无用镜像">pull镜像、打标签、移除无用镜像</h4>
 <ol>
 <li>pull镜像</li>
 </ol>
@@ -275,7 +289,7 @@ docker rmi registry.cn-hangzhou.aliyuncs.com/google_containers/pause:$PAUSE_VERS
 docker rmi registry.cn-hangzhou.aliyuncs.com/google_containers/coredns:$CORE_DNS_VERSION
 docker rmi registry.cn-hangzhou.aliyuncs.com/google_containers/etcd:$ETCD_VERSION
 </code></pre>
-<h2 id="开始部署">开始部署</h2>
+<h3 id="部署">部署</h3>
 <pre><code>kubeadm init --apiserver-advertise-address=你的本机IP --pod-network-cidr=10.244.0.0/16  --kubernetes-version=v1.18.8
 #执行后的输出
 ...
