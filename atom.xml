@@ -2,13 +2,91 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://tomhht.github.io</id>
     <title>hello, world</title>
-    <updated>2020-09-01T09:42:06.073Z</updated>
+    <updated>2020-09-01T11:46:51.182Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://tomhht.github.io"/>
     <link rel="self" href="https://tomhht.github.io/atom.xml"/>
     <logo>https://tomhht.github.io/images/avatar.png</logo>
     <icon>https://tomhht.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, hello, world</rights>
+    <entry>
+        <title type="html"><![CDATA[在CentOS和Ubuntu上安装和配置docker]]></title>
+        <id>https://tomhht.github.io/post/zai-centos-he-ubuntu-shang-an-zhuang-he-pei-zhi-docker/</id>
+        <link href="https://tomhht.github.io/post/zai-centos-he-ubuntu-shang-an-zhuang-he-pei-zhi-docker/">
+        </link>
+        <updated>2020-09-01T10:06:21.000Z</updated>
+        <summary type="html"><![CDATA[<p>整理docker安装心得。</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>整理docker安装心得。</p>
+<!-- more -->
+<p><strong>CentOS</strong></p>
+<pre><code># 移除旧版
+sudo yum remove docker \
+                  docker-client \
+                  docker-client-latest \
+                  docker-common \
+                  docker-latest \
+                  docker-latest-logrotate \
+                  docker-logrotate \
+                  docker-engine
+# 设置阿里云仓库repository
+sudo yum install -y yum-utils
+sudo yum-config-manager \
+    --add-repo \
+   http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+# 安装docker
+sudo yum install docker-ce docker-ce-cli containerd.io
+</code></pre>
+<p><strong>Ubuntu</strong></p>
+<pre><code># 移除旧版
+sudo apt-get remove docker docker-engine docker.io containerd runc
+# 安装依赖软件
+sudo apt-get update
+sudo apt-get install \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg-agent \
+    software-properties-common
+# 添加Docker官方GPG KEY
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+# 添加官方仓库
+sudo add-apt-repository \
+   &quot;deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+   $(lsb_release -cs) \
+   stable&quot;
+# 安装docker
+sudo apt-get update
+sudo apt-get install docker-ce docker-ce-cli containerd.io
+</code></pre>
+<p>以上操作完毕后，继续操作下面通用部分。<br>
+<strong>通用</strong></p>
+<pre><code># 启动docker
+sudo systemctl start docker
+# 加入开机启动
+sudo systemctl enable docker
+# 允许当前用户使用docker
+sudo usermod -aG docker ${USER}
+# 配置国内加速器（可显著增加docker pull镜像的成功率和速度）
+sudo tee /etc/docker/daemon.json &lt;&lt;-'EOF'
+{
+    &quot;registry-mirrors&quot;: [
+        &quot;https://dockerhub.azk8s.cn/ &quot;,
+        &quot;https://hub-mirror.c.163.com/&quot;,
+        &quot;https://docker.mirrors.ustc.edu.cn&quot;
+    ]
+}
+EOF
+sudo systemctl daemon-reload
+sudo systemctl restart docker
+</code></pre>
+<hr>
+<p>参考链接：<br>
+<a href="https://docs.docker.com/engine/install/">https://docs.docker.com/engine/install/</a><br>
+<a href="https://developer.aliyun.com/article/763983">https://developer.aliyun.com/article/763983</a><br>
+<a href="https://www.jianshu.com/p/5a911f20d93e">https://www.jianshu.com/p/5a911f20d93e</a></p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Ubuntu和CentOS端口设置]]></title>
         <id>https://tomhht.github.io/post/ubuntu-he-centos-duan-kou-she-zhi/</id>
