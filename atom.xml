@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://tomhht.github.io</id>
     <title>hello, world</title>
-    <updated>2020-09-01T01:44:04.346Z</updated>
+    <updated>2020-09-01T02:16:37.394Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://tomhht.github.io"/>
     <link rel="self" href="https://tomhht.github.io/atom.xml"/>
@@ -70,7 +70,7 @@ sudo update-grub2  #Ubuntu
 ]]></content>
     </entry>
     <entry>
-        <title type="html"><![CDATA[在Ubuntu 20.04上使用kubeadm部署Kubernetes集群]]></title>
+        <title type="html"><![CDATA[在Ubuntu 20.04和CentOS 8上使用kubeadm部署Kubernetes集群]]></title>
         <id>https://tomhht.github.io/post/zai-ubuntu-2004-shang-shi-yong-kubeadm-bu-shu-kubernetes-ji-qun/</id>
         <link href="https://tomhht.github.io/post/zai-ubuntu-2004-shang-shi-yong-kubeadm-bu-shu-kubernetes-ji-qun/">
         </link>
@@ -177,7 +177,7 @@ k8s.gcr.io/coredns:1.6.7
 </code></pre>
 <h3 id="在阿里云控制台找到所需镜像">在阿里云控制台找到所需镜像</h3>
 <ol>
-<li>https://cr.console.aliyun.com/  左侧点”镜像搜索“</li>
+<li><a href="https://cr.console.aliyun.com/">https://cr.console.aliyun.com/</a>  左侧点”镜像搜索“</li>
 <li>分别搜索”kube-apiserver“等所需镜像，点开搜索到的镜像，一定找到正确的版本号（如v1.18.8）（日期越新的越容易找到），复制页面中的”公网地址“</li>
 </ol>
 <h3 id="pull镜像-打标签-移除无用镜像">pull镜像、打标签、移除无用镜像</h3>
