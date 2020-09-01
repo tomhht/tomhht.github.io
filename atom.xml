@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://tomhht.github.io</id>
     <title>hello, world</title>
-    <updated>2020-09-01T02:16:37.394Z</updated>
+    <updated>2020-09-01T09:06:40.802Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://tomhht.github.io"/>
     <link rel="self" href="https://tomhht.github.io/atom.xml"/>
@@ -85,6 +85,45 @@ sudo update-grub2  #Ubuntu
 <blockquote>
 <p>control node（控制节点）、worker node（工作节点） 都要做这些准备工作。</p>
 </blockquote>
+<h2 id="检查各主机配置">检查各主机配置</h2>
+<h3 id="检查cpu和内存">检查cpu和内存</h3>
+<p>无论是虚拟机还是物理机，都要求<strong>cpu内核≥2，内存≥2G</strong>。</p>
+<h3 id="检查主机名hostname">检查主机名hostname</h3>
+<p>hostname要求<strong>不能是 localhost，且不包含下划线、小数点、大写字母</strong>。</p>
+<pre><code># 检查hostname
+hostname 
+# 修改 hostname
+hostnamectl set-hostname 名字
+# 查看修改结果
+hostnamectl status
+# 设置 hostname 解析
+echo &quot;127.0.0.1   $(hostname)&quot; &gt;&gt; /etc/hosts
+</code></pre>
+<h3 id="设置固定ip">设置固定IP</h3>
+<p>建议使用nmcli配置，因为跨平台（Ubuntu和CentOS）。</p>
+<pre><code>nmcli
+//如果提示没有安装，先按下面步骤安装
+# 安装nmcli
+sudo yum install NetworkManager #CentOS
+sudo apt-get install network-manager #Ubuntu
+# 检查nmcli是否接管了网络管理
+nmcli g
+//正常是显示绿色的信息。如果STATE列显示disconnected，则Ubuntu要修改/etc/netplan/里的yaml文件，在version下面添加一行renderer: NetworkManager，保存退出后执行sudo systemctl daemon-reload 和 sudo systemctl restart NetworkManager
+# 查看当前默认网卡和ip信息
+ip route show
+ip a
+//ip route show 命令中，可以知道机器的网关DNS和默认网卡，如 default via 192.168.127.2 dev ens33，via后面的内容 192.168.127.2 就是网关和DNS，dev后面的内容 ens33 就是默认网卡
+//ip a 命令中，可显示默认网卡的 IP 地址，Kubernetes 将使用此 IP 地址与集群内的其他节点通信，如192.168.127.131
+//所有节点上 Kubernetes 所使用的 IP 地址必须可以互通（无需 NAT 映射、无安全组或防火墙隔离）
+# 设置固定IP，网卡、ip地址、网关、DNS可参考上面的信息
+sudo nmcli c mod ens33 \
+ipv4.addresses 192.168.127.131/24 \
+ipv4.method manual \
+ipv4.gateway 192.168.127.2 \
+ipv4.dns 192.168.127.2
+# 让配置立刻生效
+sudo nmcli c up ens33
+</code></pre>
 <h2 id="创建k8s文件夹">创建k8s文件夹</h2>
 <p>存放安装过程所需文件。执行下面代码：</p>
 <pre><code>mkdir ~/k8s
@@ -101,25 +140,42 @@ sysctl -n net.bridge.bridge-nf-call-iptables
 sysctl -n net.bridge.bridge-nf-call-ip6tables
 </code></pre>
 <h2 id="打开端口">打开端口</h2>
-<p>先打开Ubuntu自带的防火墙ufw，因为ufw设置似乎更简单一些。执行下面代码：</p>
+<h3 id="ubuntu的准备工作centos跳过">Ubuntu的准备工作（CentOS跳过）</h3>
+<p>先打开Ubuntu自带的防火墙ufw。执行下面代码：</p>
 <pre><code>sudo ufw enable
 </code></pre>
 <p>执行后提示可能断开连接，直接y继续，别担心，ssh连接不会断。<br>
 如果使用ssh连接，还需要执行下面代码，以便打开ssh连接：</p>
 <pre><code>sudo ufw allow ssh
 </code></pre>
-<p>接下来分别设置：</p>
+<h3 id="打开相应端口">打开相应端口</h3>
+<p>依据所使用的系统（Ubuntu / CentOS），执行相应代码。</p>
 <ol>
 <li>控制节点 Control-plane nodes</li>
 </ol>
-<pre><code>sudo ufw allow 6443/tcp
+<pre><code># Ubuntu
+sudo ufw allow 6443/tcp
 sudo ufw allow 2379:2380/tcp
 sudo ufw allow 10250:10252/tcp
+//上面代码中的冒号代表端口区间。
+
+#CentOS
+sudo firewall-cmd --zone=public --add-port=6443/tcp --permanent
+sudo firewall-cmd --zone=public --add-port=2379-2380/tcp --permanent
+sudo firewall-cmd --zone=public --add-port=10250-10252/tcp --permanent
+sudo firewall-cmd --reload
 </code></pre>
-<p>上面代码中的冒号代表端口区间，如10250:10252代表10250、10251、10252这3个端口一起设置。<br>
-2. 工作节点 Worker nodes</p>
-<pre><code>sudo ufw allow 10250/tcp
+<ol start="2">
+<li>工作节点 Worker nodes</li>
+</ol>
+<pre><code># Ubuntu
+sudo ufw allow 10250/tcp
 sudo ufw allow 30000:32767/tcp
+
+# CentOS
+sudo firewall-cmd --zone=public --add-port=10250/tcp --permanent
+sudo firewall-cmd --zone=public --add-port=30000-32767/tcp --permanent
+sudo firewall-cmd --reload
 </code></pre>
 <h2 id="禁用swap">禁用swap</h2>
 <p>由于swap性能低下，Kubeadm默认要求禁止使用swap。执行如下代码：</p>
@@ -131,7 +187,7 @@ sudo sed -i 's/.*swap.*/#&amp;/' /etc/fstab  #永久禁用swap
 <blockquote>
 <p>control node（控制节点）、worker node（工作节点） 上都安装。</p>
 </blockquote>
-<p><strong>Ubuntu代码</strong></p>
+<p><strong>Ubuntu</strong></p>
 <pre><code>sudo apt-get update &amp;&amp; sudo apt-get install -y apt-transport-https curl
 curl -s https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg | sudo apt-key add -
 cat &lt;&lt;EOF | sudo tee /etc/apt/sources.list.d/kubernetes.list
@@ -141,7 +197,7 @@ sudo apt-get update
 sudo apt-get install -y kubelet kubeadm kubectl
 sudo apt-mark hold kubelet kubeadm kubectl
 </code></pre>
-<p><strong>CentOS代码</strong></p>
+<p><strong>CentOS</strong></p>
 <pre><code>cat &lt;&lt;EOF | sudo tee /etc/yum.repos.d/kubernetes.repo
 [kubernetes]
 name=Kubernetes
@@ -178,7 +234,7 @@ k8s.gcr.io/coredns:1.6.7
 <h3 id="在阿里云控制台找到所需镜像">在阿里云控制台找到所需镜像</h3>
 <ol>
 <li><a href="https://cr.console.aliyun.com/">https://cr.console.aliyun.com/</a>  左侧点”镜像搜索“</li>
-<li>分别搜索”kube-apiserver“等所需镜像，点开搜索到的镜像，一定找到正确的版本号（如v1.18.8）（日期越新的越容易找到），复制页面中的”公网地址“</li>
+<li>分别搜索”kube-apiserver“等所有名称，点开搜索到的镜像，一定找到正确的版本号（如v1.18.8）（日期越新的越容易找到），复制页面中的”公网地址“</li>
 </ol>
 <h3 id="pull镜像-打标签-移除无用镜像">pull镜像、打标签、移除无用镜像</h3>
 <ol>
@@ -253,6 +309,10 @@ kubectl apply -f kube-flannel.yml
 </code></pre>
 <p><img src="https://tomhht.github.io/post-images/1598781791291.png" alt="Pods运行情况" loading="lazy"><br>
 通过<code>docker container ls</code>也可以看到pods里的容器运行情况。</p>
+<h2 id="打开kubectl的autocompletion自动完成功能">打开kubectl的autocompletion自动完成功能</h2>
+<pre><code>echo 'source &lt;(kubectl completion bash)' &gt;&gt;~/.bashrc
+# 执行后，退出shell（如exit）再进入，即可实现自动完成
+</code></pre>
 <p>以上为control node控制节点的部署全流程。</p>
 <hr>
 <h1 id="worker-node工作节点加入集群">worker node工作节点加入集群</h1>
@@ -282,9 +342,12 @@ quay.io/coreos/flannel:v0.12.0-amd64 &gt; k8s-imagesV1.18.8-flannelV0.12.0.tar
 <pre><code>cd ~/k8s
 docker load &lt; k8s-imagesV1.18.8-flannelV0.12.0.tar
 </code></pre>
+<blockquote>
+<p>worker node实际需要的只有3个镜像，分别是<code>kube-proxy, pause, flannel</code></p>
+</blockquote>
 <h2 id="加入集群">加入集群</h2>
 <p>执行之前在control node上单独保存出来的<code>kubeadm join...</code>，类似于：</p>
-<pre><code>kubeadm join 192.168.127.132:6443 --token rddtz5.mz2v4ee96177eay5     --discovery-token-ca-cert-hash sha256:671404c4f80afe5d06d8eefcd5acc6049c4d84f1ebf1091b09bc180ea44e79b7
+<pre><code>sudo kubeadm join 192.168.127.132:6443 --token rddtz5.mz2v4ee96177eay5     --discovery-token-ca-cert-hash sha256:671404c4f80afe5d06d8eefcd5acc6049c4d84f1ebf1091b09bc180ea44e79b7
 </code></pre>
 <p>如果join指令没记录下来，或者集群创建已经超过24小时了，那么需要重新生成join指令。在<strong>control node</strong>上执行：</p>
 <pre><code>kubeadm token create --print-join-command
@@ -303,6 +366,7 @@ docker load &lt; k8s-imagesV1.18.8-flannelV0.12.0.tar
 <p>参考链接：<br>
 <a href="https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/">https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/</a><br>
 <a href="https://www.cnblogs.com/hellxz/p/use-kubeadm-init-kubernetes-cluster.html">https://www.cnblogs.com/hellxz/p/use-kubeadm-init-kubernetes-cluster.html</a><br>
+<a href="https://www.kuboard.cn/install/install-k8s.html">https://www.kuboard.cn/install/install-k8s.html</a><br>
 <a href="https://blog.csdn.net/LeonardoYasuo/article/details/101483438">https://blog.csdn.net/LeonardoYasuo/article/details/101483438</a><br>
 <a href="https://www.cnblogs.com/yinzhengjie/p/12258215.html">https://www.cnblogs.com/yinzhengjie/p/12258215.html</a></p>
 ]]></content>
