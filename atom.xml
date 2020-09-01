@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://tomhht.github.io</id>
     <title>hello, world</title>
-    <updated>2020-08-31T12:12:00.314Z</updated>
+    <updated>2020-09-01T01:44:04.346Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://tomhht.github.io"/>
     <link rel="self" href="https://tomhht.github.io/atom.xml"/>
@@ -129,9 +129,9 @@ sudo sed -i 's/.*swap.*/#&amp;/' /etc/fstab  #永久禁用swap
 <p>可通过<code>free -m</code>来检查禁用效果。</p>
 <h1 id="安装kubeadm-kubelet和kubectl">安装kubeadm, kubelet和kubectl</h1>
 <blockquote>
-<p>control node（控制节点）、worker node（工作节点） 上都安装。<br>
-<strong>Ubuntu代码</strong></p>
+<p>control node（控制节点）、worker node（工作节点） 上都安装。</p>
 </blockquote>
+<p><strong>Ubuntu代码</strong></p>
 <pre><code>sudo apt-get update &amp;&amp; sudo apt-get install -y apt-transport-https curl
 curl -s https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg | sudo apt-key add -
 cat &lt;&lt;EOF | sudo tee /etc/apt/sources.list.d/kubernetes.list
