@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://tomhht.github.io</id>
     <title>hello, world</title>
-    <updated>2020-09-01T12:06:53.132Z</updated>
+    <updated>2020-09-02T07:15:35.029Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://tomhht.github.io"/>
     <link rel="self" href="https://tomhht.github.io/atom.xml"/>
@@ -19,11 +19,11 @@
 ]]></summary>
         <content type="html"><![CDATA[<p>加速系统下软件安装速度。</p>
 <!-- more -->
-<p><strong>Ubuntu</strong></p>
-<pre><code># 备份源配置文件
-sudo cp /etc/apt/sources.list /etc/apt/sources.list.bak
+<h1 id="ubuntu">Ubuntu</h1>
+<p>备份源配置文件：</p>
+<pre><code>sudo cp /etc/apt/sources.list /etc/apt/sources.list.bak
 </code></pre>
-<p>用下面内容替换source.list的内容，使用gedit vim之类编辑软件即可。</p>
+<p>用下面内容替换source.list的内容，使用gedit、vim之类编辑软件即可：</p>
 <pre><code># 默认注释了源码镜像以提高 apt update 速度，如有需要可自行取消注释
 deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal main restricted universe multiverse
 # deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal main restricted universe multiverse
@@ -38,10 +38,24 @@ deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-security main restricted 
 # deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-proposed main restricted universe multiverse
 # deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-proposed main restricted universe multiverse
 </code></pre>
+<p>更新软件包缓存，使配置文件生效：</p>
+<pre><code>sudo apt-get update
+</code></pre>
+<h1 id="centos">CentOS</h1>
+<pre><code>path='/etc/yum.repos.d/'
+repos=(CentOS-AppStream.repo CentOS-Base.repo CentOS-centosplus.repo CentOS-Extras.repo CentOS-PowerTools.repo)
+for repo in ${repos[@]}; do
+sudo cp $path$repo $path$repo'.bak' #备份源配置文件
+sudo sed -i &quot;s/^mirrorlist/#&amp;/; s/^#baseurl/baseurl/; s/http:\/\/mirror.centos.org/https:\/\/mirrors.tuna.tsinghua.edu.cn\/centos/&quot; $path$repo #修改配置文件
+done
+# 更新软件包缓存，使配置文件生效
+sudo yum makecache
+</code></pre>
 <hr>
 <p>参考链接：<br>
 <a href="https://mirrors.tuna.tsinghua.edu.cn/help/ubuntu/">https://mirrors.tuna.tsinghua.edu.cn/help/ubuntu/</a><br>
-<a href="https://blog.csdn.net/xiangxianghehe/article/details/105688062">https://blog.csdn.net/xiangxianghehe/article/details/105688062</a></p>
+<a href="https://blog.csdn.net/xiangxianghehe/article/details/105688062">https://blog.csdn.net/xiangxianghehe/article/details/105688062</a><br>
+<a href="https://mirror.tuna.tsinghua.edu.cn/help/centos/">https://mirror.tuna.tsinghua.edu.cn/help/centos/</a></p>
 ]]></content>
     </entry>
     <entry>
