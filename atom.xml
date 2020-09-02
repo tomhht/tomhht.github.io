@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://tomhht.github.io</id>
     <title>hello, world</title>
-    <updated>2020-09-02T07:18:57.285Z</updated>
+    <updated>2020-09-02T07:40:02.626Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://tomhht.github.io"/>
     <link rel="self" href="https://tomhht.github.io/atom.xml"/>
@@ -108,8 +108,8 @@ sudo add-apt-repository \
 sudo apt-get update
 sudo apt-get install docker-ce docker-ce-cli containerd.io
 </code></pre>
-<p>以上操作完毕后，继续操作下面通用部分。<br>
-<strong>通用</strong></p>
+<p>以上操作完毕后，继续操作下面通用部分。</p>
+<h1 id="通用">通用</h1>
 <pre><code># 启动docker
 sudo systemctl start docker
 # 加入开机启动
@@ -167,10 +167,26 @@ sudo firewall-cmd --zone=public --add-port=30000-32767/tcp --permanent
 </code></pre>
 <h1 id="ubuntu">Ubuntu</h1>
 <p>核心指令<code>ufw</code></p>
+<h2 id="启用ufw">启用ufw</h2>
+<pre><code>sudo ufw enable
+sudo ufw allow ssh
+</code></pre>
+<h2 id="查看已开放端口-2">查看已开放端口</h2>
+<pre><code>sudo ufw status
+</code></pre>
+<h2 id="开启端口-2">开启端口</h2>
+<pre><code>sudo ufw allow 10250/tcp
+sudo ufw allow 30000:32767/tcp
+//30000:32767是端口区间
+</code></pre>
+<h2 id="关闭端口-2">关闭端口</h2>
+<pre><code>sudo ufw delete allow 10250/tcp
+</code></pre>
 <hr>
 <p>参考链接：<br>
 <a href="https://www.cnblogs.com/Sungeek/p/8257681.html">https://www.cnblogs.com/Sungeek/p/8257681.html</a><br>
-<a href="https://blog.csdn.net/Sun_Hui_/article/details/103178840">https://blog.csdn.net/Sun_Hui_/article/details/103178840</a></p>
+<a href="https://blog.csdn.net/Sun_Hui_/article/details/103178840">https://blog.csdn.net/Sun_Hui_/article/details/103178840</a><br>
+<a href="https://www.itcoder.tech/posts/how-to-setup-a-firewall-with-ufw-on-ubuntu-20-04/">https://www.itcoder.tech/posts/how-to-setup-a-firewall-with-ufw-on-ubuntu-20-04/</a></p>
 ]]></content>
     </entry>
     <entry>
