@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://tomhht.github.io</id>
     <title>hello, world</title>
-    <updated>2020-09-02T07:17:14.793Z</updated>
+    <updated>2020-09-02T07:18:57.285Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://tomhht.github.io"/>
     <link rel="self" href="https://tomhht.github.io/atom.xml"/>
@@ -23,7 +23,7 @@
 <p>备份源配置文件：</p>
 <pre><code>sudo cp /etc/apt/sources.list /etc/apt/sources.list.bak
 </code></pre>
-<p>用下面内容替换source.list的内容，使用gedit、vim之类编辑软件即可：</p>
+<p>使用vim或gedit编辑source.list，用下面内容替换原有内容：</p>
 <pre><code># 默认注释了源码镜像以提高 apt update 速度，如有需要可自行取消注释
 deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal main restricted universe multiverse
 # deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal main restricted universe multiverse
