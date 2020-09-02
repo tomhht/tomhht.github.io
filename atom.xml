@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://tomhht.github.io</id>
     <title>hello, world</title>
-    <updated>2020-09-02T07:40:02.626Z</updated>
+    <updated>2020-09-02T07:50:17.519Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://tomhht.github.io"/>
     <link rel="self" href="https://tomhht.github.io/atom.xml"/>
@@ -516,10 +516,13 @@ docker load &lt; k8s-imagesV1.18.8-flannelV0.12.0.tar
 <p>在control node上执行：</p>
 <pre><code>kubectl get nodes -o wide
 </code></pre>
-<p><img src="https://tomhht.github.io/post-images/1598863291668.png" alt="集群节点信息" loading="lazy"> <br /></p>
+<p><img src="https://tomhht.github.io/post-images/1599032788153.png" alt="集群节点信息" loading="lazy"> <br /></p>
 <pre><code>kubectl get pods -A -o wide
 </code></pre>
-<figure data-type="image" tabindex="1"><img src="https://tomhht.github.io/post-images/1598863358214.png" alt="集群pods信息" loading="lazy"></figure>
+<p><img src="https://tomhht.github.io/post-images/1599032818248.png" alt="集群pods信息" loading="lazy"> <br /><br>
+如果STATUS不是Running，则排查故障点：</p>
+<pre><code>kubectl describe pods -n kube-system kube-proxy-t2zbw
+</code></pre>
 <hr>
 <p>参考链接：<br>
 <a href="https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/">https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/</a><br>
