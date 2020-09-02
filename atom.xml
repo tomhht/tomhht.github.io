@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://tomhht.github.io</id>
     <title>hello, world</title>
-    <updated>2020-09-02T07:16:10.749Z</updated>
+    <updated>2020-09-02T07:17:14.793Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://tomhht.github.io"/>
     <link rel="self" href="https://tomhht.github.io/atom.xml"/>
@@ -15,9 +15,9 @@
         <link href="https://tomhht.github.io/post/pei-zhi-ubuntu-he-centos-qing-hua-yuan/">
         </link>
         <updated>2020-09-01T11:56:40.000Z</updated>
-        <summary type="html"><![CDATA[<p>加速系统下软件安装速度。</p>
+        <summary type="html"><![CDATA[<p>加快Ubuntu和CentOS软件下载速度。</p>
 ]]></summary>
-        <content type="html"><![CDATA[<p>加速系统下软件安装速度。</p>
+        <content type="html"><![CDATA[<p>加快Ubuntu和CentOS软件下载速度。</p>
 <!-- more -->
 <h1 id="ubuntu">Ubuntu</h1>
 <p>备份源配置文件：</p>
