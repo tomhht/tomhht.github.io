@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://tomhht.github.io</id>
     <title>hello, world</title>
-    <updated>2020-09-02T12:08:47.091Z</updated>
+    <updated>2020-09-03T01:34:40.133Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://tomhht.github.io"/>
     <link rel="self" href="https://tomhht.github.io/atom.xml"/>
@@ -424,7 +424,7 @@ sudo sed -i 's/.*swap.*/#&amp;/' /etc/fstab  #永久禁用swap
 </code></pre>
 <p>可通过<code>free -m</code>来检查禁用效果。</p>
 <h2 id="安装docker">安装docker</h2>
-<p>详见<a href="docker%E5%AE%89%E8%A3%85%E5%92%8C%E9%85%8D%E7%BD%AE">/post/zai-centos-he-ubuntu-shang-an-zhuang-he-pei-zhi-docker</a></p>
+<p>详见<a herf="/post/zai-centos-he-ubuntu-shang-an-zhuang-he-pei-zhi-docker">docker安装和配置</a></p>
 <h1 id="安装kubeadm-kubelet和kubectl">安装kubeadm, kubelet和kubectl</h1>
 <blockquote>
 <p>control node（控制节点）、worker node（工作节点） 上都安装。</p>
