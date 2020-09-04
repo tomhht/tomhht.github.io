@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://tomhht.github.io</id>
     <title>hello, world</title>
-    <updated>2020-09-04T02:18:38.375Z</updated>
+    <updated>2020-09-04T02:27:24.259Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://tomhht.github.io"/>
     <link rel="self" href="https://tomhht.github.io/atom.xml"/>
@@ -19,8 +19,8 @@
 ]]></summary>
         <content type="html"><![CDATA[<p>除了k8s要求的端口要开，worker node上面flannel的端口<code>8285/udp（udp backend) 或8472/udp（vxlan backend）</code>也得开。</p>
 <!-- more -->
-<p>用<code>nmcli</code>查看，发现flannel 用到的是<code>vxlan backend</code>，因此需要打开<code>8472/udp</code>。<br>
-打开后，发现Ubuntu的node可以被ping通，同时如果上面跑着<code>httpd</code>，其他node也可以<code>curl</code>到内容；而CentOS只能被ping通，<code>curl 10.244.2.19</code>的时候会显示<code>curl: (7) Failed to connect to 10.244.2.19 port 80: No route to host</code>。<br>
+<p>用<code>nmcli</code>查看，发现flannel 用到的是<code>vxlan backend</code>，因此需要打开<code>8472/udp</code>。<br  /><br>
+打开后，发现Ubuntu的node可以被ping通，同时如果上面跑着<code>httpd</code>，其他node也可以<code>curl</code>到内容；而CentOS只能被ping通，<code>curl 10.244.2.19</code>的时候会显示<code>curl: (7) Failed to connect to 10.244.2.19 port 80: No route to host</code>。<br /><br>
 查了n多资料，几乎都是关闭防火墙，关闭后确实能解决，但我想这不是生产环境中的做法。最终在这位仁兄Louis He的博文<a href="https://www.cnblogs.com/Dev0ps/p/11401530.html">Kubernetes集群开启Firewall</a>中找到答案<code>add-masquerade</code>。同时也谢谢让我找到8472端口的仁兄<a href="https://www.codenong.com/39293441/">关于网络：Kubernetes集群所需的端口</a>。</p>
 <pre><code># Ubuntu
 sudo ufw allow 8472/udp #搞定
