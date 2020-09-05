@@ -2,13 +2,32 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://tomhht.github.io</id>
     <title>hello, world</title>
-    <updated>2020-09-04T02:27:24.259Z</updated>
+    <updated>2020-09-05T06:07:20.994Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://tomhht.github.io"/>
     <link rel="self" href="https://tomhht.github.io/atom.xml"/>
     <logo>https://tomhht.github.io/images/avatar.png</logo>
     <icon>https://tomhht.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, hello, world</rights>
+    <entry>
+        <title type="html"><![CDATA[第一次正式开车]]></title>
+        <id>https://tomhht.github.io/post/di-yi-ci-zheng-shi-kai-che/</id>
+        <link href="https://tomhht.github.io/post/di-yi-ci-zheng-shi-kai-che/">
+        </link>
+        <updated>2020-09-05T05:44:19.000Z</updated>
+        <summary type="html"><![CDATA[<p>拿了本大半年了，昨天第一次正式开车。</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>拿了本大半年了，昨天第一次正式开车。</p>
+<!-- more -->
+<p>太刺激了。画龙、剐蹭、油合离门，应有尽有。科三考了3次才过，考过后抽奖中了一个陪练机会，跟着教练开了趟易县（同练的还有其他学员）。这就是之前全部的开车经历了。<br /><br>
+昨天因为要接侄子，学校在一个鸟不拉屎的地方，约不到车，所以硬着头皮把家里的车开出来了。首先找地方掉头，光顾着看后面，结果车头蹭人家墙上了，引得人家出来检查。<br /><br>
+好不容易掉好头，跟别的车交汇，一闪躲，噌，又是一声，之前左边，这次右边。<br /><br>
+继续前行，后来想想，居然当时心态没崩。<br /><br>
+画龙前行，志玲姐姐忽然来一句右转立刻左转，我这路口到底怎么走啊，遂决定直接左转，进了左转车道等红灯，发现右转后走10米果然有左转路，WTF。左转车道硬着头皮左转完了，终于找到一个路口直接掉头，走上了康庄大道。<br /><br>
+转完了突然道路宽阔了起来，路上也没几辆车，于是let's go，4档的干活，这感觉就是乌龟爬到了兔子身上。<br /><br>
+到校后，等了几个钟头，中途又开着出去练练手，接上娃后返程的路途也算有惊无险，终于平安的运送回家。庆幸的是这一路没有倒车入库、侧方停车之类的技术活。万幸。</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[k8s集群跨节点pods无法ping通以及无法curl]]></title>
         <id>https://tomhht.github.io/post/k8s-ji-qun-kua-jie-dian-pods-wu-fa-ping-tong/</id>
