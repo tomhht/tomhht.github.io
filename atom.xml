@@ -2,13 +2,52 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://tomhht.github.io</id>
     <title>hello, world</title>
-    <updated>2020-09-05T06:56:32.189Z</updated>
+    <updated>2020-09-05T07:48:46.804Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://tomhht.github.io"/>
     <link rel="self" href="https://tomhht.github.io/atom.xml"/>
     <logo>https://tomhht.github.io/images/avatar.png</logo>
     <icon>https://tomhht.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, hello, world</rights>
+    <entry>
+        <title type="html"><![CDATA[Kubernetes busybox nslookup提示无法解析的问题]]></title>
+        <id>https://tomhht.github.io/post/kubernetes-busybox-nslookup-ti-shi-wu-fa-jie-xi-de-wen-ti/</id>
+        <link href="https://tomhht.github.io/post/kubernetes-busybox-nslookup-ti-shi-wu-fa-jie-xi-de-wen-ti/">
+        </link>
+        <updated>2020-09-05T07:43:38.000Z</updated>
+        <summary type="html"><![CDATA[<p>使用默认版本的busybox会出现nslookup提示无法解析的问题。使用1.28.3版本即可解决。</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>使用默认版本的busybox会出现nslookup提示无法解析的问题。使用1.28.3版本即可解决。</p>
+<!-- more -->
+<p>症状：</p>
+<pre><code>kubectl run busybox --rm -it --image=busybox /bin/sh
+/ # nslookup httpd-svc
+Server:		10.96.0.10
+Address:	10.96.0.10:53
+
+** server can't find httpd-svc.default.svc.cluster.local: NXDOMAIN
+
+*** Can't find httpd-svc.svc.cluster.local: No answer
+*** Can't find httpd-svc.cluster.local: No answer
+*** Can't find httpd-svc.default.svc.cluster.local: No answer
+*** Can't find httpd-svc.svc.cluster.local: No answer
+*** Can't find httpd-svc.cluster.local: No answer
+</code></pre>
+<p>解决：</p>
+<pre><code>kubectl run busybox --rm -it --image=busybox:1.28.3 /bin/sh
+If you don't see a command prompt, try pressing enter.
+/ # nslookup httpd-svc
+Server:    10.96.0.10
+Address 1: 10.96.0.10 kube-dns.kube-system.svc.cluster.local
+
+Name:      httpd-svc
+Address 1: 10.108.142.200 httpd-svc.default.svc.cluster.local
+</code></pre>
+<hr>
+<p>参考链接：<br>
+<a href="https://www.cnblogs.com/vincenshen/p/9751193.html">https://www.cnblogs.com/vincenshen/p/9751193.html</a></p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[第一次正式开车]]></title>
         <id>https://tomhht.github.io/post/di-yi-ci-zheng-shi-kai-che/</id>
@@ -34,9 +73,9 @@
         <link href="https://tomhht.github.io/post/k8s-ji-qun-kua-jie-dian-pods-wu-fa-ping-tong/">
         </link>
         <updated>2020-09-03T10:33:25.000Z</updated>
-        <summary type="html"><![CDATA[<p>除了k8s要求的端口要开，worker node上面flannel的端口<code>8285/udp（udp backend) 或8472/udp（vxlan backend）</code>也得开。</p>
+        <summary type="html"><![CDATA[<p>除了k8s要求的端口要开，worker node上面flannel的端口<code>8285/udp（udp backend) 或8472/udp（vxlan backend）</code>也得开。（master似乎也得开，否则master里面的coredns无法为worker node服务）</p>
 ]]></summary>
-        <content type="html"><![CDATA[<p>除了k8s要求的端口要开，worker node上面flannel的端口<code>8285/udp（udp backend) 或8472/udp（vxlan backend）</code>也得开。</p>
+        <content type="html"><![CDATA[<p>除了k8s要求的端口要开，worker node上面flannel的端口<code>8285/udp（udp backend) 或8472/udp（vxlan backend）</code>也得开。（master似乎也得开，否则master里面的coredns无法为worker node服务）</p>
 <!-- more -->
 <p>用<code>nmcli</code>查看，发现flannel 用到的是<code>vxlan backend</code>，因此需要打开<code>8472/udp</code>。<br  /><br>
 打开后，发现Ubuntu的node可以被ping通，同时如果上面跑着<code>httpd</code>，其他node也可以<code>curl</code>到内容；而CentOS只能被ping通，<code>curl 10.244.2.19</code>的时候会显示<code>curl: (7) Failed to connect to 10.244.2.19 port 80: No route to host</code>。<br /><br>
@@ -463,12 +502,15 @@ sysctl -n net.bridge.bridge-nf-call-ip6tables
 sudo ufw allow 6443/tcp
 sudo ufw allow 2379:2380/tcp
 sudo ufw allow 10250:10252/tcp
+sudo ufw allow 8472/udp #for flannel。如果不开，则coredns无法为worker nodes服务
 //上面代码中的冒号代表端口区间。
 
-#CentOS
+# CentOS
 sudo firewall-cmd --zone=public --add-port=6443/tcp --permanent
 sudo firewall-cmd --zone=public --add-port=2379-2380/tcp --permanent
 sudo firewall-cmd --zone=public --add-port=10250-10252/tcp --permanent
+sudo firewall-cmd --zone=public --add-port=8472/udp --permanent #for flannel。如果不开，则coredns无法为worker nodes服务
+sudo firewall-cmd --add-masquerade --permanent #for flannel NAT
 sudo firewall-cmd --reload
 </code></pre>
 <ol start="2">
