@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://tomhht.github.io</id>
     <title>hello, world</title>
-    <updated>2020-09-05T07:48:46.804Z</updated>
+    <updated>2020-09-05T07:56:35.451Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://tomhht.github.io"/>
     <link rel="self" href="https://tomhht.github.io/atom.xml"/>
@@ -73,9 +73,9 @@ Address 1: 10.108.142.200 httpd-svc.default.svc.cluster.local
         <link href="https://tomhht.github.io/post/k8s-ji-qun-kua-jie-dian-pods-wu-fa-ping-tong/">
         </link>
         <updated>2020-09-03T10:33:25.000Z</updated>
-        <summary type="html"><![CDATA[<p>除了k8s要求的端口要开，worker node上面flannel的端口<code>8285/udp（udp backend) 或8472/udp（vxlan backend）</code>也得开。（master似乎也得开，否则master里面的coredns无法为worker node服务）</p>
+        <summary type="html"><![CDATA[<p>除了k8s要求的端口要开，worker node上面的<code>8472/udp（vxlan backend）</code>也得开。（尽管参考链接里明确的是worker node要开，但master似乎也得开，否则master里面的coredns无法为worker node服务）</p>
 ]]></summary>
-        <content type="html"><![CDATA[<p>除了k8s要求的端口要开，worker node上面flannel的端口<code>8285/udp（udp backend) 或8472/udp（vxlan backend）</code>也得开。（master似乎也得开，否则master里面的coredns无法为worker node服务）</p>
+        <content type="html"><![CDATA[<p>除了k8s要求的端口要开，worker node上面的<code>8472/udp（vxlan backend）</code>也得开。（尽管参考链接里明确的是worker node要开，但master似乎也得开，否则master里面的coredns无法为worker node服务）</p>
 <!-- more -->
 <p>用<code>nmcli</code>查看，发现flannel 用到的是<code>vxlan backend</code>，因此需要打开<code>8472/udp</code>。<br  /><br>
 打开后，发现Ubuntu的node可以被ping通，同时如果上面跑着<code>httpd</code>，其他node也可以<code>curl</code>到内容；而CentOS只能被ping通，<code>curl 10.244.2.19</code>的时候会显示<code>curl: (7) Failed to connect to 10.244.2.19 port 80: No route to host</code>。<br /><br>
