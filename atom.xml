@@ -2,13 +2,32 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://tomhht.github.io</id>
     <title>hello, world</title>
-    <updated>2020-09-07T04:07:06.676Z</updated>
+    <updated>2020-09-07T08:52:52.176Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://tomhht.github.io"/>
     <link rel="self" href="https://tomhht.github.io/atom.xml"/>
     <logo>https://tomhht.github.io/images/avatar.png</logo>
     <icon>https://tomhht.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, hello, world</rights>
+    <entry>
+        <title type="html"><![CDATA[在Ubuntu上用snap安装Helm]]></title>
+        <id>https://tomhht.github.io/post/zai-ubuntu-shang-yong-snap-an-zhuang-helm/</id>
+        <link href="https://tomhht.github.io/post/zai-ubuntu-shang-yong-snap-an-zhuang-helm/">
+        </link>
+        <updated>2020-09-07T08:45:29.000Z</updated>
+        <summary type="html"><![CDATA[<p>命令挺简单，就是速度很感人。</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>命令挺简单，就是速度很感人。</p>
+<!-- more -->
+<pre><code>sudo snap install helm --classic
+</code></pre>
+<p>安装过慢的解决办法还没尝试，参考链接先记录下来了，先谢谢原作者。</p>
+<hr>
+<p>参考链接：<br>
+<a href="https://helm.sh/">Helm官方</a><br>
+<a href="https://kuricat.com/gist/snap-install-too-slow-zmbjy">snap install 过慢 的解决方法 @Kurisu</a></p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[k8s测试mysql挂载nfs遇到的问题]]></title>
         <id>https://tomhht.github.io/post/pei-zhi-nfs/</id>
@@ -422,29 +441,6 @@ sudo ufw allow 30000:32767/tcp
 <a href="https://www.cnblogs.com/Sungeek/p/8257681.html">https://www.cnblogs.com/Sungeek/p/8257681.html</a><br>
 <a href="https://blog.csdn.net/Sun_Hui_/article/details/103178840">https://blog.csdn.net/Sun_Hui_/article/details/103178840</a><br>
 <a href="https://www.itcoder.tech/posts/how-to-setup-a-firewall-with-ufw-on-ubuntu-20-04/">https://www.itcoder.tech/posts/how-to-setup-a-firewall-with-ufw-on-ubuntu-20-04/</a></p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Ubuntu和CentOS修改grub]]></title>
-        <id>https://tomhht.github.io/post/ubuntu-he-centos-xiu-gai-grub/</id>
-        <link href="https://tomhht.github.io/post/ubuntu-he-centos-xiu-gai-grub/">
-        </link>
-        <updated>2020-08-31T03:19:33.000Z</updated>
-        <summary type="html"><![CDATA[<p>grub的修改位置和生效方法。</p>
-]]></summary>
-        <content type="html"><![CDATA[<p>grub的修改位置和生效方法。</p>
-<!-- more -->
-<p>grub的修改位置是同样的。</p>
-<pre><code>sudo vim /etc/default/grub
-</code></pre>
-<p>生效方法有区别：</p>
-<pre><code>sudo grub2-mkconfig –o /etc/grub2.cfg  #CentOS
-sudo update-grub2  #Ubuntu
-</code></pre>
-<hr>
-<p>参考链接：<br>
-<a href="https://blog.csdn.net/whatday/article/details/106123164">https://blog.csdn.net/whatday/article/details/106123164</a><br>
-<a href="https://www.techbrown.com/change-default-grub2-entries-timeout-centos-7/">https://www.techbrown.com/change-default-grub2-entries-timeout-centos-7/</a></p>
 ]]></content>
     </entry>
 </feed>
