@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://tomhht.github.io</id>
     <title>hello, world</title>
-    <updated>2020-09-07T09:07:24.739Z</updated>
+    <updated>2020-09-07T09:22:40.742Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://tomhht.github.io"/>
     <link rel="self" href="https://tomhht.github.io/atom.xml"/>
@@ -23,10 +23,13 @@
 <pre><code>sudo snap install helm --classic
 </code></pre>
 <p>安装过慢的解决办法还没尝试，参考链接先记录下来了，先谢谢原作者。</p>
+<blockquote>
+<p>据官方说明，Helm 3已经不需要Tiller了，所以其他参考资料上安装Tiller的步骤直接跳过。</p>
+</blockquote>
 <h1 id="配置">配置</h1>
 <h2 id="自动补全">自动补全</h2>
 <pre><code>echo 'source &lt;(helm completion bash)' &gt;&gt;~/.bashrc
-source ~/.bashrc #使自动补全功能立刻生效
+source ~/.bashrc #使配置立刻生效
 </code></pre>
 <hr>
 <p>参考链接：<br>
