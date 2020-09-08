@@ -2,13 +2,58 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://tomhht.github.io</id>
     <title>hello, world</title>
-    <updated>2020-09-07T11:09:50.924Z</updated>
+    <updated>2020-09-08T06:29:17.983Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://tomhht.github.io"/>
     <link rel="self" href="https://tomhht.github.io/atom.xml"/>
     <logo>https://tomhht.github.io/images/avatar.png</logo>
     <icon>https://tomhht.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, hello, world</rights>
+    <entry>
+        <title type="html"><![CDATA[问题解决：Win10 ssh Bad owner or permissions on .ssh/config]]></title>
+        <id>https://tomhht.github.io/post/wen-ti-jie-jue-win10-ssh-bad-owner-or-permissions-on-sshconfig/</id>
+        <link href="https://tomhht.github.io/post/wen-ti-jie-jue-win10-ssh-bad-owner-or-permissions-on-sshconfig/">
+        </link>
+        <updated>2020-09-08T06:02:21.000Z</updated>
+        <summary type="html"><![CDATA[<p>这个bad owner问题不仅出现在vs code用remote ssh连接时，同时也出现在PowerShell用ssh连接时。</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>这个bad owner问题不仅出现在vs code用remote ssh连接时，同时也出现在PowerShell用ssh连接时。</p>
+<!-- more -->
+<h1 id="问题描述">问题描述</h1>
+<pre><code>PS C:\Users\TOM&gt; ssh tom@192.168.127.128
+Bad owner or permissions on C:\\Users\\TOM/.ssh/config
+</code></pre>
+<h1 id="解决">解决</h1>
+<h2 id="查看权限">查看权限</h2>
+<pre><code>PS C:\Users\TOM&gt; icacls .ssh/config
+.ssh/config NT AUTHORITY\SYSTEM:(I)(F)
+            BUILTIN\Administrators:(I)(F)
+            TOM\TOM:(I)(F)
+            Everyone:(I)(F)
+</code></pre>
+<h2 id="移除inheritance">移除inheritance</h2>
+<pre><code>PS C:\Users\TOM&gt; icacls .ssh\config /inheritance:d
+已处理的文件: .ssh\config
+已成功处理 1 个文件; 处理 0 个文件时失败
+</code></pre>
+<h2 id="移除everyone">移除Everyone</h2>
+<pre><code>PS C:\Users\TOM&gt; icacls .\.ssh\config /remove everyone
+已处理的文件: .\.ssh\config
+已成功处理 1 个文件; 处理 0 个文件时失败
+</code></pre>
+<h2 id="查看owner">查看owner</h2>
+<pre><code>PS C:\Users\TOM&gt; (get-acl .ssh\config).owner
+TOM\TOM
+</code></pre>
+<h2 id="移除owner">移除owner</h2>
+<pre><code>PS C:\Users\TOM&gt; icacls .ssh\config /remove TOM\TOM
+已处理的文件: .ssh\config
+已成功处理 1 个文件; 处理 0 个文件时失败
+//这里还踩了个坑，一开始remove TOM，没解决问题，直到写成remove TOM\TOM才成功，必须跟owner一致。
+</code></pre>
+<p>搞定。</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[在Ubuntu上用snap安装Helm]]></title>
         <id>https://tomhht.github.io/post/zai-ubuntu-shang-yong-snap-an-zhuang-helm/</id>
@@ -397,59 +442,6 @@ sudo systemctl restart docker
 <a href="https://docs.docker.com/engine/install/">https://docs.docker.com/engine/install/</a><br>
 <a href="https://developer.aliyun.com/article/763983">https://developer.aliyun.com/article/763983</a><br>
 <a href="https://www.jianshu.com/p/5a911f20d93e">https://www.jianshu.com/p/5a911f20d93e</a></p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Ubuntu和CentOS端口设置]]></title>
-        <id>https://tomhht.github.io/post/ubuntu-he-centos-duan-kou-she-zhi/</id>
-        <link href="https://tomhht.github.io/post/ubuntu-he-centos-duan-kou-she-zhi/">
-        </link>
-        <updated>2020-08-31T09:53:59.000Z</updated>
-        <summary type="html"><![CDATA[<p>记录下端口设置，用到啥记录啥。</p>
-]]></summary>
-        <content type="html"><![CDATA[<p>记录下端口设置，用到啥记录啥。</p>
-<!-- more -->
-<h1 id="centos">CentOS</h1>
-<p>核心指令<code>firewall-cmd</code></p>
-<h2 id="查看已开放端口">查看已开放端口</h2>
-<pre><code>sudo firewall-cmd --list-ports
-</code></pre>
-<h2 id="开启端口">开启端口</h2>
-<pre><code>sudo firewall-cmd --zone=public --add-port=10250/tcp --permanent
-sudo firewall-cmd --zone=public --add-port=30000-32767/tcp --permanent
-//--zone: 作用域 
-//--add-port=2181/tcp: 要开启的端口号，格式为：端口号/通讯协议 
-//--permanent: 使端口永久开放，如不添加，则表示临时有效，开机重启后便会失效
-//30000-32767，端口区间
-</code></pre>
-<h2 id="关闭端口">关闭端口</h2>
-<pre><code>sudo firewall-cmd --zone=public --remove-port=6443/tcp --permanent
-</code></pre>
-<h2 id="reload以便-permanent配置生效">reload以便--permanent配置生效</h2>
-<pre><code>sudo firewall-cmd --reload
-</code></pre>
-<h1 id="ubuntu">Ubuntu</h1>
-<p>核心指令<code>ufw</code></p>
-<h2 id="启用ufw">启用ufw</h2>
-<pre><code>sudo ufw enable
-sudo ufw allow ssh
-</code></pre>
-<h2 id="查看已开放端口-2">查看已开放端口</h2>
-<pre><code>sudo ufw status
-</code></pre>
-<h2 id="开启端口-2">开启端口</h2>
-<pre><code>sudo ufw allow 10250/tcp
-sudo ufw allow 30000:32767/tcp
-//30000:32767是端口区间
-</code></pre>
-<h2 id="关闭端口-2">关闭端口</h2>
-<pre><code>sudo ufw delete allow 10250/tcp
-</code></pre>
-<hr>
-<p>参考链接：<br>
-<a href="https://www.cnblogs.com/Sungeek/p/8257681.html">https://www.cnblogs.com/Sungeek/p/8257681.html</a><br>
-<a href="https://blog.csdn.net/Sun_Hui_/article/details/103178840">https://blog.csdn.net/Sun_Hui_/article/details/103178840</a><br>
-<a href="https://www.itcoder.tech/posts/how-to-setup-a-firewall-with-ufw-on-ubuntu-20-04/">https://www.itcoder.tech/posts/how-to-setup-a-firewall-with-ufw-on-ubuntu-20-04/</a></p>
 ]]></content>
     </entry>
 </feed>
