@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://tomhht.github.io</id>
     <title>hello, world</title>
-    <updated>2020-09-10T06:45:26.644Z</updated>
+    <updated>2020-09-10T10:37:14.090Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://tomhht.github.io"/>
     <link rel="self" href="https://tomhht.github.io/atom.xml"/>
@@ -352,7 +352,7 @@ deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-security main restricted 
 repos=(CentOS-AppStream.repo CentOS-Base.repo CentOS-centosplus.repo CentOS-Extras.repo CentOS-PowerTools.repo)
 for repo in ${repos[@]}; do
 sudo cp $path$repo $path$repo'.bak' #备份源配置文件
-sudo sed -i &quot;s/^mirrorlist/#&amp;/; s/^#baseurl/baseurl/; s/http:\/\/mirror.centos.org/https:\/\/mirrors.tuna.tsinghua.edu.cn\/centos/&quot; $path$repo #修改配置文件
+sudo sed -i &quot;s/^mirrorlist/#&amp;/; s/^#baseurl/baseurl/; s/http:\/\/mirror.centos.org\/\$contentdir/https:\/\/mirrors.tuna.tsinghua.edu.cn\/centos/&quot; $path$repo #修改配置文件
 done
 # 更新软件包缓存，使配置文件生效
 sudo yum makecache
