@@ -2,13 +2,57 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://tomhht.github.io</id>
     <title>hello, world</title>
-    <updated>2020-09-09T07:40:13.697Z</updated>
+    <updated>2020-09-10T06:45:26.644Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://tomhht.github.io"/>
     <link rel="self" href="https://tomhht.github.io/atom.xml"/>
     <logo>https://tomhht.github.io/images/avatar.png</logo>
     <icon>https://tomhht.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, hello, world</rights>
+    <entry>
+        <title type="html"><![CDATA[使用virsh删除kvm虚拟机]]></title>
+        <id>https://tomhht.github.io/post/shi-yong-virsh-shan-chu-kvm-xu-ni-ji/</id>
+        <link href="https://tomhht.github.io/post/shi-yong-virsh-shan-chu-kvm-xu-ni-ji/">
+        </link>
+        <updated>2020-09-10T06:21:16.000Z</updated>
+        <summary type="html"><![CDATA[<p>发现libvirt/images下有个qcow2文件挺大，于是想用virsh安全删掉。</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>发现libvirt/images下有个qcow2文件挺大，于是想用virsh安全删掉。</p>
+<!-- more -->
+<h1 id="列出虚拟机">列出虚拟机</h1>
+<p>开始没用sudo，结果啥都没有，明明记得之前搞过俩呢。</p>
+<pre><code>sudo virsh list --all
+ Id    Name                           State
+----------------------------------------------------
+ -     vm1                            shut off
+ -     vm2                            shut off
+</code></pre>
+<h1 id="检查虚拟机配置">检查虚拟机配置</h1>
+<pre><code>sudo virsh dumpxml vm1 | grep 'source file'
+    &lt;source file='/var/lib/libvirt/images/cirros-0.5.1-x86_64-disk.img'/&gt;
+    &lt;source file='/var/lib/libvirt/images/vm1.qcow2'/&gt; #要删这个
+</code></pre>
+<h1 id="编辑配置">编辑配置</h1>
+<p>确保该虚拟机未运行。删除配置中挂载<code>vm1.qcow2</code>的段落。</p>
+<pre><code>sudo virsh edit vm1
+# 删除这段
+    &lt;disk type='file' device='disk'&gt;
+      &lt;driver name='qemu' type='qcow2'/&gt;
+      &lt;source file='/var/lib/libvirt/images/vm1.qcow2'/&gt;
+      &lt;target dev='hda' bus='ide'/&gt;
+      &lt;address type='drive' controller='0' bus='0' target='0' unit='1'/&gt;
+    &lt;/disk&gt; 
+</code></pre>
+<h1 id="删除文件">删除文件</h1>
+<pre><code>sudo rm /var/lib/libvirt/images/vm1.qcow2
+</code></pre>
+<p>搞定。</p>
+<hr>
+<p>参考链接：<br>
+<a href="https://huataihuang.gitbooks.io/cloud-atlas/content/virtual/kvm/startup/in_action/delete_a_running_vm_on_kvm.html">使用virsh删除运行的KVM VM · Cloud Atlas</a><br>
+<a href="https://www.jianshu.com/p/5111134452a8">KVM磁盘扩容和添加</a></p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[在Ubuntu上用snap安装Helm]]></title>
         <id>https://tomhht.github.io/post/zai-ubuntu-shang-yong-snap-an-zhuang-helm/</id>
@@ -397,59 +441,6 @@ sudo systemctl restart docker
 <a href="https://docs.docker.com/engine/install/">https://docs.docker.com/engine/install/</a><br>
 <a href="https://developer.aliyun.com/article/763983">https://developer.aliyun.com/article/763983</a><br>
 <a href="https://www.jianshu.com/p/5a911f20d93e">https://www.jianshu.com/p/5a911f20d93e</a></p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Ubuntu和CentOS端口设置]]></title>
-        <id>https://tomhht.github.io/post/ubuntu-he-centos-duan-kou-she-zhi/</id>
-        <link href="https://tomhht.github.io/post/ubuntu-he-centos-duan-kou-she-zhi/">
-        </link>
-        <updated>2020-08-31T09:53:59.000Z</updated>
-        <summary type="html"><![CDATA[<p>记录下端口设置，用到啥记录啥。</p>
-]]></summary>
-        <content type="html"><![CDATA[<p>记录下端口设置，用到啥记录啥。</p>
-<!-- more -->
-<h1 id="centos">CentOS</h1>
-<p>核心指令<code>firewall-cmd</code></p>
-<h2 id="查看已开放端口">查看已开放端口</h2>
-<pre><code>sudo firewall-cmd --list-ports
-</code></pre>
-<h2 id="开启端口">开启端口</h2>
-<pre><code>sudo firewall-cmd --zone=public --add-port=10250/tcp --permanent
-sudo firewall-cmd --zone=public --add-port=30000-32767/tcp --permanent
-//--zone: 作用域 
-//--add-port=2181/tcp: 要开启的端口号，格式为：端口号/通讯协议 
-//--permanent: 使端口永久开放，如不添加，则表示临时有效，开机重启后便会失效
-//30000-32767，端口区间
-</code></pre>
-<h2 id="关闭端口">关闭端口</h2>
-<pre><code>sudo firewall-cmd --zone=public --remove-port=6443/tcp --permanent
-</code></pre>
-<h2 id="reload以便-permanent配置生效">reload以便--permanent配置生效</h2>
-<pre><code>sudo firewall-cmd --reload
-</code></pre>
-<h1 id="ubuntu">Ubuntu</h1>
-<p>核心指令<code>ufw</code></p>
-<h2 id="启用ufw">启用ufw</h2>
-<pre><code>sudo ufw enable
-sudo ufw allow ssh
-</code></pre>
-<h2 id="查看已开放端口-2">查看已开放端口</h2>
-<pre><code>sudo ufw status
-</code></pre>
-<h2 id="开启端口-2">开启端口</h2>
-<pre><code>sudo ufw allow 10250/tcp
-sudo ufw allow 30000:32767/tcp
-//30000:32767是端口区间
-</code></pre>
-<h2 id="关闭端口-2">关闭端口</h2>
-<pre><code>sudo ufw delete allow 10250/tcp
-</code></pre>
-<hr>
-<p>参考链接：<br>
-<a href="https://www.cnblogs.com/Sungeek/p/8257681.html">https://www.cnblogs.com/Sungeek/p/8257681.html</a><br>
-<a href="https://blog.csdn.net/Sun_Hui_/article/details/103178840">https://blog.csdn.net/Sun_Hui_/article/details/103178840</a><br>
-<a href="https://www.itcoder.tech/posts/how-to-setup-a-firewall-with-ufw-on-ubuntu-20-04/">https://www.itcoder.tech/posts/how-to-setup-a-firewall-with-ufw-on-ubuntu-20-04/</a></p>
 ]]></content>
     </entry>
 </feed>
