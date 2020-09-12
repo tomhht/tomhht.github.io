@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://tomhht.github.io</id>
     <title>hello, world</title>
-    <updated>2020-09-11T05:59:59.204Z</updated>
+    <updated>2020-09-12T02:21:40.652Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://tomhht.github.io"/>
     <link rel="self" href="https://tomhht.github.io/atom.xml"/>
@@ -10,7 +10,7 @@
     <icon>https://tomhht.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, hello, world</rights>
     <entry>
-        <title type="html"><![CDATA[最小化安装centos后的设置]]></title>
+        <title type="html"><![CDATA[最小化安装centos和ubuntu之后的配置]]></title>
         <id>https://tomhht.github.io/post/zui-xiao-hua-an-zhuang-centos-hou-de-she-zhi/</id>
         <link href="https://tomhht.github.io/post/zui-xiao-hua-an-zhuang-centos-hou-de-she-zhi/">
         </link>
@@ -32,6 +32,10 @@ source ~/.bashrc
 <h1 id="安装wget">安装wget</h1>
 <pre><code>sudo yum -y install wget
 </code></pre>
+<hr>
+<p>参考链接：<br>
+<a href="https://www.cnblogs.com/fengdejiyixx/p/11592417.html">Centos和Ubuntu系统最小化安装基础命令</a><br>
+<a href="https://linuxconfig.org/ubuntu-20-04-server-installation">Ubuntu 20.04 Server Installation</a></p>
 ]]></content>
     </entry>
     <entry>
