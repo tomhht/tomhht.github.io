@@ -8,7 +8,7 @@
 <meta name="keywords" content="GitHub, IT, ICT, 大数据, Linux, Ubuntu, CentOS, 云计算, 机器学习, 深度学习, Kubernetes, Docker, OpenStack">
 <meta name="description" content="">
 <meta name="theme-color" content="#000">
-<title>关于 | hello, world</title>
+<title>安装 prometheus operator | hello, world</title>
 <link rel="shortcut icon" href="/favicon.ico?v=1599992943739">
 <link rel="stylesheet" href="/styles/main.css">
 <link rel="stylesheet" href="/media/css/mist.css">
@@ -29,8 +29,8 @@
 
 
 
-  <meta name="description" content="关于" />
-  <meta name="keywords" content="关于,about" />
+  <meta name="description" content="安装 prometheus operator" />
+  <meta name="keywords" content="helm,prometheus,prometheus operator,kubernetes,k8s" />
 </head>
 
 <body>
@@ -291,8 +291,8 @@
           <div class="section bg-color post post-page">
             <header class="post-header">
   <h1 class="post-title">
-    <a class="post-title-link" href="https://tomhht.github.io/post/about/">
-      关于
+    <a class="post-title-link" href="https://tomhht.github.io/post/an-zhuang-prometheus-operator/">
+      安装 prometheus operator
     </a>
   </h1>
   <div class="post-meta">
@@ -300,7 +300,7 @@
     <span class="meta-item pc-show">
       <i class="fa fa-calendar-o"></i>
       <span>发布于</span>
-      <span>2020-08-28</span>
+      <span>2020-09-13</span>
       <span class="post-meta-divider pc-show">|</span>
     </span>
     
@@ -309,14 +309,32 @@
       <span class="pc-show">分类于</span>
       
       
-      <a href="https://tomhht.github.io/tag/_YTMFN_lm/">
-        <span>关于</span>
+      <a href="https://tomhht.github.io/tag/wZ5maZQyf/">
+        <span>helm</span>
       </a>、
       
       
       
-      <a href="https://tomhht.github.io/tag/cVh0paDPKo/">
-        <span>about</span>
+      <a href="https://tomhht.github.io/tag/PM-ekRSbhz/">
+        <span>prometheus</span>
+      </a>、
+      
+      
+      
+      <a href="https://tomhht.github.io/tag/9k4vb02qe6/">
+        <span>prometheus operator</span>
+      </a>、
+      
+      
+      
+      <a href="https://tomhht.github.io/tag/9iWQqlqnT/">
+        <span>kubernetes</span>
+      </a>、
+      
+      
+      
+      <a href="https://tomhht.github.io/tag/waCBSEanF/">
+        <span>k8s</span>
       </a>
       
       
@@ -330,12 +348,12 @@
     <span class="meta-item">
       <span class="post-meta-divider">|</span>
       <i class="fa fa-file-word-o"></i>
-      <span>67<span class="pc-show">字数</span></span>
+      <span>78<span class="pc-show">字数</span></span>
     </span>
     
     
     
-    <span id="/post/about/" data-flag-title="关于" class="meta-item pc-show leancloud_visitors">
+    <span id="/post/an-zhuang-prometheus-operator/" data-flag-title="安装 prometheus operator" class="meta-item pc-show leancloud_visitors">
       <span class="post-meta-divider">|</span>
       <i class="fa fa-eye"></i>
       <span>浏览量：<span class="leancloud-visitors-count"></span></span>
@@ -344,7 +362,16 @@
   </div>
 </header>
             <div class="post-body next-md-body" id="post_body">
-              <p>第一次拥有自己的博客，感觉兴奋，折腾了半天，主要是为了自己能有一个记录和吐槽的地方。曾经也在其他网站做过blogger，结果要么关张要么消失要么墙墙，一言难尽。</p>
+              <p>众所周知的原因搞得安装起来太复杂了，并且helm的prometheus operator的chart项目还迁移过，更有点云里雾里。</p>
+<!-- more -->
+<p>先创建个namespace来用。</p>
+<pre><code>kubectl create namespace monitoring
+</code></pre>
+<hr>
+<p>参考链接：<br>
+<a href="https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack">https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack</a><br>
+<a href="https://github.com/prometheus-operator/prometheus-operator">https://github.com/prometheus-operator/prometheus-operator</a><br>
+<a href="https://github.com/prometheus-operator/kube-prometheus">https://github.com/prometheus-operator/kube-prometheus</a></p>
 
             </div>
             <div class="post-footer">
@@ -355,7 +382,7 @@
     </li>
     <li class="post-copyright-link">
       <strong>本文链接：</strong>
-      <a href="https://tomhht.github.io/post/about/" title="关于">https://tomhht.github.io/post/about/</a>
+      <a href="https://tomhht.github.io/post/an-zhuang-prometheus-operator/" title="安装 prometheus operator">https://tomhht.github.io/post/an-zhuang-prometheus-operator/</a>
     </li>
     <li class="post-copyright-license">
       <strong>版权声明： </strong>
@@ -364,9 +391,15 @@
   </ul>
   <div class="tags">
     
-      <a href="https://tomhht.github.io/tag/_YTMFN_lm/"># 关于</a>
+      <a href="https://tomhht.github.io/tag/wZ5maZQyf/"># helm</a>
     
-      <a href="https://tomhht.github.io/tag/cVh0paDPKo/"># about</a>
+      <a href="https://tomhht.github.io/tag/PM-ekRSbhz/"># prometheus</a>
+    
+      <a href="https://tomhht.github.io/tag/9k4vb02qe6/"># prometheus operator</a>
+    
+      <a href="https://tomhht.github.io/tag/9iWQqlqnT/"># kubernetes</a>
+    
+      <a href="https://tomhht.github.io/tag/waCBSEanF/"># k8s</a>
     
   </div>
   <div class="nav">
@@ -374,6 +407,10 @@
       
     </div>
     <div class="nav-next">
+      
+        <a class="nav-pc-next" title="最小化安装centos和ubuntu之后的配置" href="https://tomhht.github.io/post/zui-xiao-hua-an-zhuang-centos-hou-de-she-zhi/">最小化安装centos和ubuntu之后的配置</a>
+        <a class="nav-mobile-next" title="最小化安装centos和ubuntu之后的配置" href="https://tomhht.github.io/post/zui-xiao-hua-an-zhuang-centos-hou-de-she-zhi/">下一篇</a>
+        <i class="fa fa-chevron-right"></i>
       
     </div>
   </div>

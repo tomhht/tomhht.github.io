@@ -2,13 +2,33 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://tomhht.github.io</id>
     <title>hello, world</title>
-    <updated>2020-09-13T01:41:54.588Z</updated>
+    <updated>2020-09-13T10:29:09.679Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://tomhht.github.io"/>
     <link rel="self" href="https://tomhht.github.io/atom.xml"/>
     <logo>https://tomhht.github.io/images/avatar.png</logo>
     <icon>https://tomhht.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, hello, world</rights>
+    <entry>
+        <title type="html"><![CDATA[安装 prometheus operator]]></title>
+        <id>https://tomhht.github.io/post/an-zhuang-prometheus-operator/</id>
+        <link href="https://tomhht.github.io/post/an-zhuang-prometheus-operator/">
+        </link>
+        <updated>2020-09-13T09:45:34.000Z</updated>
+        <summary type="html"><![CDATA[<p>众所周知的原因搞得安装起来太复杂了，并且helm的prometheus operator的chart项目还迁移过，更有点云里雾里。</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>众所周知的原因搞得安装起来太复杂了，并且helm的prometheus operator的chart项目还迁移过，更有点云里雾里。</p>
+<!-- more -->
+<p>先创建个namespace来用。</p>
+<pre><code>kubectl create namespace monitoring
+</code></pre>
+<hr>
+<p>参考链接：<br>
+<a href="https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack">https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack</a><br>
+<a href="https://github.com/prometheus-operator/prometheus-operator">https://github.com/prometheus-operator/prometheus-operator</a><br>
+<a href="https://github.com/prometheus-operator/kube-prometheus">https://github.com/prometheus-operator/kube-prometheus</a></p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[最小化安装centos和ubuntu之后的配置]]></title>
         <id>https://tomhht.github.io/post/zui-xiao-hua-an-zhuang-centos-hou-de-she-zhi/</id>
@@ -342,55 +362,6 @@ kubectl describe pods nginx-app-5d85b5fb59-2ct5p
 <p>参考链接：<br>
 <a href="https://blog.csdn.net/qq_43279371/article/details/107768713">https://blog.csdn.net/qq_43279371/article/details/107768713</a><br>
 <a href="https://blog.csdn.net/kenkao/article/details/86764788">https://blog.csdn.net/kenkao/article/details/86764788</a></p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[配置Ubuntu和CentOS清华源]]></title>
-        <id>https://tomhht.github.io/post/pei-zhi-ubuntu-he-centos-qing-hua-yuan/</id>
-        <link href="https://tomhht.github.io/post/pei-zhi-ubuntu-he-centos-qing-hua-yuan/">
-        </link>
-        <updated>2020-09-01T11:56:40.000Z</updated>
-        <summary type="html"><![CDATA[<p>加快Ubuntu和CentOS软件下载速度。</p>
-]]></summary>
-        <content type="html"><![CDATA[<p>加快Ubuntu和CentOS软件下载速度。</p>
-<!-- more -->
-<h1 id="ubuntu">Ubuntu</h1>
-<p>备份源配置文件：</p>
-<pre><code>sudo cp /etc/apt/sources.list /etc/apt/sources.list.bak
-</code></pre>
-<p>使用vim或gedit编辑source.list，用下面内容替换原有内容：</p>
-<pre><code># 默认注释了源码镜像以提高 apt update 速度，如有需要可自行取消注释
-deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal main restricted universe multiverse
-# deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal main restricted universe multiverse
-deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-updates main restricted universe multiverse
-# deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-updates main restricted universe multiverse
-deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-backports main restricted universe multiverse
-# deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-backports main restricted universe multiverse
-deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-security main restricted universe multiverse
-# deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-security main restricted universe multiverse
-
-# 预发布软件源，不建议启用
-# deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-proposed main restricted universe multiverse
-# deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-proposed main restricted universe multiverse
-</code></pre>
-<p>更新软件包缓存，使配置文件生效：</p>
-<pre><code>sudo apt-get update
-</code></pre>
-<h1 id="centos">CentOS</h1>
-<pre><code>path='/etc/yum.repos.d/'
-repos=(CentOS-AppStream.repo CentOS-Base.repo CentOS-centosplus.repo CentOS-Extras.repo CentOS-PowerTools.repo)
-for repo in ${repos[@]}; do
-sudo cp $path$repo $path$repo'.bak' #备份源配置文件
-sudo sed -i &quot;s/^mirrorlist/#&amp;/; s/^#baseurl/baseurl/; s/http:\/\/mirror.centos.org\/\$contentdir/https:\/\/mirrors.tuna.tsinghua.edu.cn\/centos/&quot; $path$repo #修改配置文件
-done
-# 更新软件包缓存，使配置文件生效
-sudo yum makecache
-</code></pre>
-<hr>
-<p>参考链接：<br>
-<a href="https://mirrors.tuna.tsinghua.edu.cn/help/ubuntu/">https://mirrors.tuna.tsinghua.edu.cn/help/ubuntu/</a><br>
-<a href="https://blog.csdn.net/xiangxianghehe/article/details/105688062">https://blog.csdn.net/xiangxianghehe/article/details/105688062</a><br>
-<a href="https://mirror.tuna.tsinghua.edu.cn/help/centos/">https://mirror.tuna.tsinghua.edu.cn/help/centos/</a></p>
 ]]></content>
     </entry>
 </feed>
