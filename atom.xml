@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://tomhht.github.io</id>
     <title>hello, world</title>
-    <updated>2020-09-13T10:29:09.679Z</updated>
+    <updated>2020-09-14T06:15:15.351Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://tomhht.github.io"/>
     <link rel="self" href="https://tomhht.github.io/atom.xml"/>
@@ -19,9 +19,137 @@
 ]]></summary>
         <content type="html"><![CDATA[<p>众所周知的原因搞得安装起来太复杂了，并且helm的prometheus operator的chart项目还迁移过，更有点云里雾里。</p>
 <!-- more -->
+<h1 id="创建专用namespace">创建专用namespace</h1>
 <p>先创建个namespace来用。</p>
 <pre><code>kubectl create namespace monitoring
 </code></pre>
+<h1 id="单独安装crd">单独安装CRD</h1>
+<p>CRD就是Custom Resource Definition。<br>
+本来应该是<code>helm install kube-prometheus-stack</code>的时候就能装，but as you know..<br>
+通过科学上网，先下载yaml再说：</p>
+<pre><code># 整齐点儿
+mkdir -p ~/helm/prometheus-operator
+cd ~/helm/prometheus-operator
+
+# 下载yaml
+curl -x http://192.168.127.1:58591 -fsSLO https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/master/example/prometheus-operator-crd/monitoring.coreos.com_alertmanagers.yaml
+curl -x http://192.168.127.1:58591 -fsSLO https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/master/example/prometheus-operator-crd/monitoring.coreos.com_podmonitors.yaml
+curl -x http://192.168.127.1:58591 -fsSLO https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/master/example/prometheus-operator-crd/monitoring.coreos.com_probes.yaml
+curl -x http://192.168.127.1:58591 -fsSLO https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/master/example/prometheus-operator-crd/monitoring.coreos.com_prometheuses.yaml
+curl -x http://192.168.127.1:58591 -fsSLO https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/master/example/prometheus-operator-crd/monitoring.coreos.com_prometheusrules.yaml
+curl -x http://192.168.127.1:58591 -fsSLO https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/master/example/prometheus-operator-crd/monitoring.coreos.com_servicemonitors.yaml
+curl -x http://192.168.127.1:58591 -fsSLO https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/master/example/prometheus-operator-crd/monitoring.coreos.com_thanosrulers.yaml
+
+# 安装
+kubectl apply -f ~/helm/prometheus-operator/
+</code></pre>
+<h1 id="安装-kube-prometheus-stack">安装 kube-prometheus-stack</h1>
+<p>kube-prometheus-stack基于prometheus-operator制作，并集成了依赖</p>
+<ul>
+<li>stable/kube-state-metrics</li>
+<li>stable/prometheus-node-exporter</li>
+<li>grafana/grafana</li>
+</ul>
+<pre><code># 安装
+helm install kube-prometheus-stack prometheus-community/kube-prometheus-stack --set prometheusOperator.createCustomResource=false -n monitoring
+# 查看安装情况
+kubectl -n monitoring get deployments
+NAME                                       READY   UP-TO-DATE   AVAILABLE   AGE
+kube-prometheus-stack-grafana              1/1     1            1           4h30m
+kube-prometheus-stack-kube-state-metrics   1/1     1            1           4h30m
+kube-prometheus-stack-operator             1/1     1            1           4h30m
+
+kubectl -n monitoring get pods -owide
+NAME                                                        READY   STATUS    RESTARTS   AGE     IP                NODE           NOMINATED NODE   READINESS GATES
+alertmanager-kube-prometheus-stack-alertmanager-0           2/2     Running   2          4h14m   10.244.1.32       mini-ubuntu    &lt;none&gt;           &lt;none&gt;
+kube-prometheus-stack-grafana-8b85d667c-5w8sn               2/2     Running   4          4h32m   10.244.2.23       mini-centos    &lt;none&gt;           &lt;none&gt;
+kube-prometheus-stack-kube-state-metrics-5cf575d8f8-6m7jt   1/1     Running   1          4h32m   10.244.1.33       mini-ubuntu    &lt;none&gt;           &lt;none&gt;
+kube-prometheus-stack-operator-65fbd96bdb-9zhmz             2/2     Running   6          4h32m   10.244.2.21       mini-centos    &lt;none&gt;           &lt;none&gt;
+kube-prometheus-stack-prometheus-node-exporter-68sxv        1/1     Running   2          4h32m   192.168.127.133   mini-centos    &lt;none&gt;           &lt;none&gt;
+kube-prometheus-stack-prometheus-node-exporter-864w9        1/1     Running   1          4h32m   192.168.127.132   ubuntuserver   &lt;none&gt;           &lt;none&gt;
+kube-prometheus-stack-prometheus-node-exporter-nr274        1/1     Running   1          4h32m   192.168.127.134   mini-ubuntu    &lt;none&gt;           &lt;none&gt;
+prometheus-kube-prometheus-stack-prometheus-0               3/3     Running   6          4h14m   10.244.2.22       mini-centos    &lt;none&gt;           &lt;none&gt;
+
+kubectl -n monitoring get svc
+NAME                                             TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)                      AGE
+alertmanager-operated                            ClusterIP   None             &lt;none&gt;        9093/TCP,9094/TCP,9094/UDP   4h16m
+kube-prometheus-stack-alertmanager               ClusterIP   10.101.245.140   &lt;none&gt;        9093/TCP                     4h34m
+kube-prometheus-stack-grafana                    ClusterIP   10.106.193.98    &lt;none&gt;        80/TCP                       4h34m
+kube-prometheus-stack-kube-state-metrics         ClusterIP   10.108.208.70    &lt;none&gt;        8080/TCP                     4h34m
+kube-prometheus-stack-operator                   ClusterIP   10.110.217.187   &lt;none&gt;        8080/TCP,443/TCP             4h34m
+kube-prometheus-stack-prometheus                 ClusterIP   10.104.189.224   &lt;none&gt;        9090/TCP                     4h34m
+kube-prometheus-stack-prometheus-node-exporter   ClusterIP   10.102.189.12    &lt;none&gt;        9100/TCP                     4h34m
+prometheus-operated                              ClusterIP   None             &lt;none&gt;        9090/TCP                     4h16m
+</code></pre>
+<blockquote>
+<p>遇到问题往后看。</p>
+</blockquote>
+<h1 id="troubleshooting">Troubleshooting</h1>
+<p>安装过程各种报错，当然主要是镜像pull不下来，尤其是<code>quay.io</code>的镜像。(我的挺奇怪，居然自己pull成功了几个<code>quay.io</code>)</p>
+<h2 id="排查问题">排查问题</h2>
+<pre><code>kubectl -n monitoring describe pods prometheus-kube-prometheus-stack-prometheus-0
+
+Events:
+  Type     Reason   Age                    From                  Message
+  ----     ------   ----                   ----                  -------
+  Normal   Pulling  60m (x4 over 83m)      kubelet, mini-centos  Pulling image &quot;quay.io/coreos/prometheus-config-reloader:v0.38.1&quot;
+  Warning  Failed   58m (x4 over 79m)      kubelet, mini-centos  Failed to pull image &quot;quay.io/coreos/prometheus-config-reloader:v0.38.1&quot;: rpc error: code = Unknown desc = context canceled
+  Warning  Failed   58m (x4 over 79m)      kubelet, mini-centos  Error: ErrImagePull
+  Normal   Pulling  58m (x5 over 100m)     kubelet, mini-centos  Pulling image &quot;quay.io/prometheus/prometheus:v2.18.2&quot;
+  Normal   Pulled   47m                    kubelet, mini-centos  Successfully pulled image &quot;quay.io/coreos/prometheus-config-reloader:v0.38.1&quot; in 1m11.597994512s
+  Warning  Failed   22m (x11 over 83m)     kubelet, mini-centos  Error: ErrImagePull
+  Normal   BackOff  13m (x130 over 56m)    kubelet, mini-centos  Back-off pulling image &quot;quay.io/prometheus/prometheus:v2.18.2&quot;
+  Warning  Failed   8m15s (x145 over 56m)  kubelet, mini-centos  Error: ImagePullBackOff
+  Warning  Failed   3m13s (x14 over 83m)   kubelet, mini-centos  Failed to pull image &quot;quay.io/prometheus/prometheus:v2.18.2&quot;: rpc error: code = Unknown desc = context canceled
+</code></pre>
+<h2 id="解决">解决</h2>
+<p><code>google prometheus v2.18.2</code>居然发现<code>docker hub</code>里有，于是在<code>mini-centos</code>主机上：</p>
+<pre><code>docker pull prom/prometheus:v2.18.2
+v2.18.2: Pulling from prom/prometheus
+0f8c40e1270f: Already exists 
+626a2a3fee8c: Already exists 
+dde61fbb486b: Already exists 
+22b936665674: Downloading [=================================================&gt; ]  20.66MB/20.76MB
+b9cb37b79bc0: Download complete 
+a14008f52cd5: Download complete 
+c89901a55493: Waiting 
+</code></pre>
+<p>就定这儿了，遂祭起重启docker大法：</p>
+<pre><code>sudo systemctl restart docker
+</code></pre>
+<p>重启完后，接着：</p>
+<pre><code>docker pull prom/prometheus:v2.18.2
+v2.18.2: Pulling from prom/prometheus
+0f8c40e1270f: Already exists 
+626a2a3fee8c: Already exists 
+dde61fbb486b: Already exists 
+22b936665674: Pull complete 
+b9cb37b79bc0: Pull complete 
+a14008f52cd5: Pull complete 
+c89901a55493: Pull complete 
+6caddd047c54: Pull complete 
+ddd1779460e5: Pull complete 
+f65cc1a7f25d: Pull complete 
+4be7bc9429a7: Pull complete 
+2d296d78b122: Pull complete 
+Digest: sha256:4d3303d1eb424e345cf48969bb7575d4d58472ad783ac41ea07fba92686f7ef5
+Status: Downloaded newer image for prom/prometheus:v2.18.2
+docker.io/prom/prometheus:v2.18.2
+</code></pre>
+<p>再检查：</p>
+<pre><code>kubectl -n monitoring get pods -owide
+NAME                                             TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)                      AGE
+alertmanager-operated                            ClusterIP   None             &lt;none&gt;        9093/TCP,9094/TCP,9094/UDP   4h16m
+kube-prometheus-stack-alertmanager               ClusterIP   10.101.245.140   &lt;none&gt;        9093/TCP                     4h34m
+kube-prometheus-stack-grafana                    ClusterIP   10.106.193.98    &lt;none&gt;        80/TCP                       4h34m
+kube-prometheus-stack-kube-state-metrics         ClusterIP   10.108.208.70    &lt;none&gt;        8080/TCP                     4h34m
+kube-prometheus-stack-operator                   ClusterIP   10.110.217.187   &lt;none&gt;        8080/TCP,443/TCP             4h34m
+kube-prometheus-stack-prometheus                 ClusterIP   10.104.189.224   &lt;none&gt;        9090/TCP                     4h34m
+kube-prometheus-stack-prometheus-node-exporter   ClusterIP   10.102.189.12    &lt;none&gt;        9100/TCP                     4h34m
+prometheus-operated                              ClusterIP   None             &lt;none&gt;        9090/TCP                     4h16m
+</code></pre>
+<p>全都ready了。<br>
+如有其他pull问题，应该可以如法炮制。</p>
 <hr>
 <p>参考链接：<br>
 <a href="https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack">https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack</a><br>
@@ -42,15 +170,25 @@
 <h1 id="更换国内源">更换国内源</h1>
 <p>参考<a href="/post/pei-zhi-ubuntu-he-centos-qing-hua-yuan">配置清华源</a></p>
 <h1 id="更新软件">更新软件</h1>
-<pre><code>dnf check-update
-sudo dnf upgrade
+<pre><code>yum check-update
+sudo yum upgrade
 </code></pre>
 <h1 id="自动补全">自动补全</h1>
-<pre><code>sudo dnf install bash-completion
+<pre><code>sudo yum install bash-completion
 source ~/.bashrc
 </code></pre>
 <h1 id="安装wget">安装wget</h1>
 <pre><code>sudo yum -y install wget
+</code></pre>
+<h1 id="安装epel">安装epel</h1>
+<pre><code>sudo yum install epel-release
+# 更换清华源
+sudo sed -e 's!^metalink=!#metalink=!g' \
+    -e 's!^#baseurl=!baseurl=!g' \
+    -e 's!//download\.fedoraproject\.org/pub!//mirrors.tuna.tsinghua.edu.cn!g' \
+    -e 's!http://mirrors\.tuna!https://mirrors.tuna!g' \
+    -i /etc/yum.repos.d/epel.repo /etc/yum.repos.d/epel-testing.repo
+sudo yum makecache
 </code></pre>
 <hr>
 <p>参考链接：<br>
