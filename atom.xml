@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://tomhht.github.io</id>
     <title>hello, world</title>
-    <updated>2020-09-14T06:19:13.412Z</updated>
+    <updated>2020-09-14T10:49:36.083Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://tomhht.github.io"/>
     <link rel="self" href="https://tomhht.github.io/atom.xml"/>
@@ -41,7 +41,7 @@ curl -x http://192.168.127.1:58591 -fsSLO https://raw.githubusercontent.com/prom
 curl -x http://192.168.127.1:58591 -fsSLO https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/master/example/prometheus-operator-crd/monitoring.coreos.com_thanosrulers.yaml
 
 # 安装
-kubectl apply -f ~/helm/prometheus-operator/
+kubectl apply -f .
 </code></pre>
 <h1 id="安装-kube-prometheus-stack">安装 kube-prometheus-stack</h1>
 <p>kube-prometheus-stack基于prometheus-operator制作，并集成了依赖</p>
@@ -69,17 +69,6 @@ kube-prometheus-stack-prometheus-node-exporter-68sxv        1/1     Running   2 
 kube-prometheus-stack-prometheus-node-exporter-864w9        1/1     Running   1          4h32m   192.168.127.132   ubuntuserver   &lt;none&gt;           &lt;none&gt;
 kube-prometheus-stack-prometheus-node-exporter-nr274        1/1     Running   1          4h32m   192.168.127.134   mini-ubuntu    &lt;none&gt;           &lt;none&gt;
 prometheus-kube-prometheus-stack-prometheus-0               3/3     Running   6          4h14m   10.244.2.22       mini-centos    &lt;none&gt;           &lt;none&gt;
-
-kubectl -n monitoring get svc
-NAME                                             TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)                      AGE
-alertmanager-operated                            ClusterIP   None             &lt;none&gt;        9093/TCP,9094/TCP,9094/UDP   4h16m
-kube-prometheus-stack-alertmanager               ClusterIP   10.101.245.140   &lt;none&gt;        9093/TCP                     4h34m
-kube-prometheus-stack-grafana                    ClusterIP   10.106.193.98    &lt;none&gt;        80/TCP                       4h34m
-kube-prometheus-stack-kube-state-metrics         ClusterIP   10.108.208.70    &lt;none&gt;        8080/TCP                     4h34m
-kube-prometheus-stack-operator                   ClusterIP   10.110.217.187   &lt;none&gt;        8080/TCP,443/TCP             4h34m
-kube-prometheus-stack-prometheus                 ClusterIP   10.104.189.224   &lt;none&gt;        9090/TCP                     4h34m
-kube-prometheus-stack-prometheus-node-exporter   ClusterIP   10.102.189.12    &lt;none&gt;        9100/TCP                     4h34m
-prometheus-operated                              ClusterIP   None             &lt;none&gt;        9090/TCP                     4h16m
 </code></pre>
 <blockquote>
 <p>遇到问题往后看。</p>
@@ -150,11 +139,46 @@ prometheus-kube-prometheus-stack-prometheus-0               3/3     Running   6 
 </code></pre>
 <p>全都ready了。<br>
 如有其他pull问题，应该可以如法炮制。</p>
+<h1 id="暴露服务">暴露服务</h1>
+<h2 id="查看服务">查看服务</h2>
+<pre><code>kubectl -n monitoring get svc
+NAME                                             TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)                      AGE
+alertmanager-operated                            ClusterIP   None             &lt;none&gt;        9093/TCP,9094/TCP,9094/UDP   4h16m
+kube-prometheus-stack-alertmanager               ClusterIP   10.101.245.140   &lt;none&gt;        9093/TCP                     4h34m
+kube-prometheus-stack-grafana                    ClusterIP   10.106.193.98    &lt;none&gt;        80/TCP                       4h34m
+kube-prometheus-stack-kube-state-metrics         ClusterIP   10.108.208.70    &lt;none&gt;        8080/TCP                     4h34m
+kube-prometheus-stack-operator                   ClusterIP   10.110.217.187   &lt;none&gt;        8080/TCP,443/TCP             4h34m
+kube-prometheus-stack-prometheus                 ClusterIP   10.104.189.224   &lt;none&gt;        9090/TCP                     4h34m
+kube-prometheus-stack-prometheus-node-exporter   ClusterIP   10.102.189.12    &lt;none&gt;        9100/TCP                     4h34m
+prometheus-operated                              ClusterIP   None             &lt;none&gt;        9090/TCP                     4h16m
+</code></pre>
+<h2 id="改nodeport">改NodePort</h2>
+<p>把下面服务的type改成NodePort：</p>
+<pre><code>kubectl -n monitoring edit svc kube-prometheus-stack-prometheus
+kubectl -n monitoring edit svc kube-prometheus-stack-alertmanager
+kubectl -n monitoring edit svc kube-prometheus-stack-grafana
+
+kubectl -n monitoring get svc
+NAME                                             TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)                      AGE
+alertmanager-operated                            ClusterIP   None             &lt;none&gt;        9093/TCP,9094/TCP,9094/UDP   4h51m
+kube-prometheus-stack-alertmanager               NodePort    10.101.245.140   &lt;none&gt;        9093:31386/TCP               5h9m
+kube-prometheus-stack-grafana                    NodePort    10.106.193.98    &lt;none&gt;        80:30835/TCP                 5h9m
+kube-prometheus-stack-kube-state-metrics         ClusterIP   10.108.208.70    &lt;none&gt;        8080/TCP                     5h9m
+kube-prometheus-stack-operator                   ClusterIP   10.110.217.187   &lt;none&gt;        8080/TCP,443/TCP             5h9m
+kube-prometheus-stack-prometheus                 NodePort    10.104.189.224   &lt;none&gt;        9090:30098/TCP               5h9m
+kube-prometheus-stack-prometheus-node-exporter   ClusterIP   10.102.189.12    &lt;none&gt;        9100/TCP                     5h9m
+prometheus-operated                              ClusterIP   None             &lt;none&gt;        9090/TCP                     4h51m
+</code></pre>
+<h1 id="访问prometheus">访问prometheus</h1>
+<p>打开http://192.168.127.132:30098/targets，一部分up一部分down，点Unhealthy<br>
+<img src="https://tomhht.github.io/post-images/1600072559551.png" alt="unhealthy" loading="lazy"></p>
 <hr>
 <p>参考链接：<br>
 <a href="https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack">https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack</a><br>
 <a href="https://github.com/prometheus-operator/prometheus-operator">https://github.com/prometheus-operator/prometheus-operator</a><br>
-<a href="https://github.com/prometheus-operator/kube-prometheus">https://github.com/prometheus-operator/kube-prometheus</a></p>
+<a href="https://github.com/prometheus-operator/kube-prometheus">https://github.com/prometheus-operator/kube-prometheus</a><br>
+<a href="https://www.bookstack.cn/read/kubernetes-learning-0.2.0/docs-58.Prometheus%20Operator.md">https://www.bookstack.cn/read/kubernetes-learning-0.2.0/docs-58.Prometheus%20Operator.md</a><br>
+<a href="https://sunmite.com/docker/use-prometheus-operator-monitor-kubernetes.html">https://sunmite.com/docker/use-prometheus-operator-monitor-kubernetes.html</a></p>
 ]]></content>
     </entry>
     <entry>
@@ -163,23 +187,12 @@ prometheus-kube-prometheus-stack-prometheus-0               3/3     Running   6 
         <link href="https://tomhht.github.io/post/zui-xiao-hua-an-zhuang-centos-hou-de-she-zhi/">
         </link>
         <updated>2020-09-10T10:54:55.000Z</updated>
-        <summary type="html"><![CDATA[<p>最小化安装centos8后的设置。</p>
+        <summary type="html"><![CDATA[<p>最小化安装centos 8后的设置。</p>
 ]]></summary>
-        <content type="html"><![CDATA[<p>最小化安装centos8后的设置。</p>
+        <content type="html"><![CDATA[<p>最小化安装centos 8后的设置。</p>
 <!-- more -->
 <h1 id="更换国内源">更换国内源</h1>
 <p>参考<a href="/post/pei-zhi-ubuntu-he-centos-qing-hua-yuan">配置清华源</a></p>
-<h1 id="更新软件">更新软件</h1>
-<pre><code>yum check-update
-sudo yum upgrade
-</code></pre>
-<h1 id="自动补全">自动补全</h1>
-<pre><code>sudo yum install bash-completion
-source ~/.bashrc
-</code></pre>
-<h1 id="安装wget">安装wget</h1>
-<pre><code>sudo yum -y install wget
-</code></pre>
 <h1 id="安装epel">安装epel</h1>
 <pre><code>sudo yum install epel-release
 # 更换清华源
@@ -189,6 +202,23 @@ sudo sed -e 's!^metalink=!#metalink=!g' \
     -e 's!http://mirrors\.tuna!https://mirrors.tuna!g' \
     -i /etc/yum.repos.d/epel.repo /etc/yum.repos.d/epel-testing.repo
 sudo yum makecache
+</code></pre>
+<h1 id="更新软件">更新软件</h1>
+<pre><code>yum check-update
+sudo yum upgrade
+</code></pre>
+<h1 id="设置时区和ntp">设置时区和NTP</h1>
+<pre><code>timedatectl set-timezone Asia/Shanghai
+sudo yum install chrony
+sudo systemctl enable --now chronyd
+timedatectl status
+</code></pre>
+<h1 id="自动补全">自动补全</h1>
+<pre><code>sudo yum install bash-completion
+source ~/.bashrc
+</code></pre>
+<h1 id="安装wget">安装wget</h1>
+<pre><code>sudo yum -y install wget
 </code></pre>
 <hr>
 <p>参考链接：<br>
