@@ -2,13 +2,37 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://tomhht.github.io</id>
     <title>hello, world</title>
-    <updated>2020-09-15T01:22:52.006Z</updated>
+    <updated>2020-09-15T01:26:20.801Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://tomhht.github.io"/>
     <link rel="self" href="https://tomhht.github.io/atom.xml"/>
     <logo>https://tomhht.github.io/images/avatar.png</logo>
     <icon>https://tomhht.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, hello, world</rights>
+    <entry>
+        <title type="html"><![CDATA[干掉Win10顽固不化的某快速访问固定项]]></title>
+        <id>https://tomhht.github.io/post/gan-diao-win10-wan-gu-bu-hua-de-mou-kuai-su-fang-wen-gu-ding-xiang/</id>
+        <link href="https://tomhht.github.io/post/gan-diao-win10-wan-gu-bu-hua-de-mou-kuai-su-fang-wen-gu-ding-xiang/">
+        </link>
+        <updated>2020-09-15T00:59:03.000Z</updated>
+        <summary type="html"><![CDATA[<p>快速访问里有个Documents死活无法取消固定，点了又说不存在，让删又删不了，lese。</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>快速访问里有个Documents死活无法取消固定，点了又说不存在，让删又删不了，lese。</p>
+<!-- more -->
+<p>感谢参考链接的作者，该方法效若桴鼓。</p>
+<blockquote>
+<p>注意事项：该方法会删除快速访问里的所有内容，考虑清楚再动手。（我的本来就只有我的电脑和烦人的那项，所以果断kill）</p>
+</blockquote>
+<ol>
+<li>拷贝<code>%APPDATA%\Microsoft\Windows\Recent\AutomaticDestinations</code>至 运行 或 文件夹地址栏，回车；</li>
+<li>删除其中文件<code>f01b4d95cf55d32a.automaticDestinations-ms</code>。<br>
+DONE，整个世界都清净了。</li>
+</ol>
+<hr>
+<p>参考链接：<br>
+<a href="https://blog.csdn.net/yin0hao/article/details/88052343">Windows 10 快速访问异常:无法取消固定,的解决方法</a></p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[安装 prometheus operator]]></title>
         <id>https://tomhht.github.io/post/an-zhuang-prometheus-operator/</id>
@@ -433,103 +457,6 @@ sudo firewall-cmd --reload #这才把curl也打通了，我太难了
 缆车上山后，直奔观光车司机推荐的必去景点，一个叫圣莲宝塔，一个叫莲子峰。圣莲宝塔就是后人翻建的一个建筑，每层都绘制了佛教的故事。其实更喜欢纯的古建筑，或者以古修古的那种，可惜这个宝塔之前彻底倒塌了。塔旁边的山上还有题字，开始还以为是书法家才会题字，可这个字怎么看都觉得挺小学生的（没有侮辱小学生的意思），一直也联想不到是哪位大家的风格。正暗自感叹见识太少，忽听得旁人百度的结果，题字人正是宝塔翻建的出资人之一，心里的大石头终于落地，看来自己审美没出大问题。旁人也怀同样感觉，大家都释然了。当然出资人的功德肯定是大大的。<br /><br>
 实际上两个景点带来的感觉没有太震撼，但是游玩这种事情，过程才是核心。中间还路过一个景点叫八仙洞，就是在山上凿穿了个洞，看洞壁的坑坑洼洼，猜测应该是前人一凿一斧的心血，洞内凉气十足，且洞顶还有渗水滴下，我们感叹应该穿棉袄进来。后来散心人在洞外忽悠后来者，说洞里租军大衣。一个几岁的小男孩说什么也不进去，跟爸妈说里面可怕，我在想估计他们一家就要就此打住了，结果孩子爸妈想了个办法，把孩子抱上让孩子趴肩头挡住眼睛，直接就进去了。这都行，孩子就是孩子。<br /><br>
 之后我们找了个僻静处吃午饭，说实话背了一路，烧饼、香肠还有水，累死我了。我爸买的这香肠也有个性，外面塑料皮剥开，里面居然还有一层塑料膜，我还没叫出来，散心人已经一口啃下并吞下了一角塑料膜。这肠有个性，这人更有个性。</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[k8s操作笔记]]></title>
-        <id>https://tomhht.github.io/post/k8s-cao-zuo-bi-ji/</id>
-        <link href="https://tomhht.github.io/post/k8s-cao-zuo-bi-ji/">
-        </link>
-        <updated>2020-09-02T09:00:52.000Z</updated>
-        <summary type="html"><![CDATA[<p>实操遇到问题好多，记录下。</p>
-]]></summary>
-        <content type="html"><![CDATA[<p>实操遇到问题好多，记录下。</p>
-<!-- more -->
-<h1 id="image拉取失败replicas被弃用">image拉取失败，replicas被弃用</h1>
-<h2 id="问题">问题</h2>
-<pre><code># 执行run，显示replicas has been deprecated，因此不生效，只部署了1个实例 
-kubectl run httpd-app --image=httpd --replicas=2
-# 检查pods运行情况，READY列显示未就绪
-kubectl get pods -n wide
-# 检查运行细节，一直显示pulling
-kubectl describe pods httpd-app
-</code></pre>
-<h2 id="解决">解决</h2>
-<ol>
-<li>删除之前的部署：</li>
-</ol>
-<pre><code>kubectl delete pods httpd-app
-</code></pre>
-<ol start="2">
-<li>创建部署文件：</li>
-</ol>
-<pre><code>cd ~/k8s
-nano nginx.yaml
-</code></pre>
-<ol start="3">
-<li>粘贴下面内容进nginx.yaml：</li>
-</ol>
-<pre><code># API 版本号
-apiVersion: apps/v1
-# 类型，如：Pod/ReplicationController/Deployment/Service/Ingress
-kind: Deployment
-metadata:
-  # Kind 的名称
-  name: nginx-app
-spec:
-  selector:
-    matchLabels:
-      # 容器标签的名字，发布 Service 时，selector 需要和这里对应
-      app: nginx
-  # 部署的实例数量
-  replicas: 2
-  template:
-    metadata:
-      labels:
-        app: nginx
-    spec:
-      # 配置容器，数组类型，说明可以配置多个容器
-      containers:
-      # 容器名称
-      - name: nginx
-        # 容器镜像
-        image: nginx:1.17
-        # 只有镜像不存在时，才会进行镜像拉取
-        imagePullPolicy: IfNotPresent
-        ports:
-        # Pod 端口
-        - containerPort: 80
-</code></pre>
-<ol start="4">
-<li>创建：</li>
-</ol>
-<pre><code>kubectl apply -f nginx.yaml
-</code></pre>
-<ol start="5">
-<li>检查：</li>
-</ol>
-<pre><code>kubectl get deployments
-kubectl describe deployment nginx-app
-kubectl get replicaset
-kubectl describe rs nginx-app-5d85b5fb59
-kubectl get pods -o wide
-kubectl describe pods nginx-app-5d85b5fb59-2ct5p
-</code></pre>
-<ol start="6">
-<li>暴露服务：</li>
-</ol>
-<pre><code>kubectl expose deployment nginx-app --port=80 --type=LoadBalancer
-</code></pre>
-<ol start="7">
-<li>查看服务状态(查看对外的端口)</li>
-</ol>
-<pre><code>kubectl get services
-</code></pre>
-<p><code>nginx-app</code>一直处于pending状态，应该是type设置为<code>LoadBalancer</code>，但没有云服务商和本地服务提供该功能。</p>
-<hr>
-<p>参考链接：<br>
-<a href="https://blog.csdn.net/qq_43279371/article/details/107768713">https://blog.csdn.net/qq_43279371/article/details/107768713</a><br>
-<a href="https://blog.csdn.net/kenkao/article/details/86764788">https://blog.csdn.net/kenkao/article/details/86764788</a></p>
 ]]></content>
     </entry>
 </feed>
