@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://tomhht.github.io</id>
     <title>hello, world</title>
-    <updated>2020-09-15T01:26:20.801Z</updated>
+    <updated>2020-09-15T01:53:31.439Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://tomhht.github.io"/>
     <link rel="self" href="https://tomhht.github.io/atom.xml"/>
@@ -25,9 +25,9 @@
 </blockquote>
 <ol>
 <li>拷贝<code>%APPDATA%\Microsoft\Windows\Recent\AutomaticDestinations</code>至 运行 或 文件夹地址栏，回车；</li>
-<li>删除其中文件<code>f01b4d95cf55d32a.automaticDestinations-ms</code>。<br>
-DONE，整个世界都清净了。</li>
+<li>删除其中文件<code>f01b4d95cf55d32a.automaticDestinations-ms</code>。</li>
 </ol>
+<p>DONE，整个世界都清净了。</p>
 <hr>
 <p>参考链接：<br>
 <a href="https://blog.csdn.net/yin0hao/article/details/88052343">Windows 10 快速访问异常:无法取消固定,的解决方法</a></p>
