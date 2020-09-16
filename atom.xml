@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://tomhht.github.io</id>
     <title>hello, world</title>
-    <updated>2020-09-16T03:54:48.822Z</updated>
+    <updated>2020-09-16T08:19:41.345Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://tomhht.github.io"/>
     <link rel="self" href="https://tomhht.github.io/atom.xml"/>
@@ -230,7 +230,7 @@ docker stop $(docker ps -q)
 </code></pre>
 <h3 id="node-exporter">node-exporter</h3>
 <pre><code>kubectl -n monitoring edit ds kube-prometheus-stack-prometheus-node-exporter
-//删行hostNetwork: true
+//删掉 hostNetwork: true 一行
 //稍等几秒即可
 //还没尝试helm给参数的方式，有机会试试override the hostNetwork setting using a values file with -f option
 </code></pre>
@@ -238,6 +238,7 @@ docker stop $(docker ps -q)
 <p>特别感谢google来的[Fix Context Deadline Exceeded Error in Prometheus Operator](Fix Context Deadline Exceeded Error in Prometheus Operator)</p>
 </blockquote>
 <h3 id="kube-proxy的down尚未搞定">kube-proxy的down（尚未搞定）</h3>
+<p>暂时跳过，快崩溃了（人），下面的方法用了根本不行。如果哪位好心，请帮忙留言提供解决办法。</p>
 <pre><code># 可能用得到的指令
 kubectl -n kube-system edit cm kube-proxy  //改metricsBindAddress: 为 0.0.0.0:10249
 kubectl delete pod -l k8s-app=kube-proxy -n kube-system
@@ -245,6 +246,9 @@ kubectl delete pod -l k8s-app=kube-proxy -n kube-system
 sudo netstat -ntlp | grep kube
 sudo ss -ntlp | grep kube
 </code></pre>
+<blockquote>
+<p>这是第一个开始搞的，结果其他都搞定了，它还岿然不动。</p>
+</blockquote>
 <hr>
 <p>参考链接：<br>
 <a href="https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack">https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack</a><br>
@@ -254,7 +258,10 @@ sudo ss -ntlp | grep kube
 <a href="https://www.qikqiak.com/post/prometheus-operator-monitor-etcd/">https://www.qikqiak.com/post/prometheus-operator-monitor-etcd/</a><br>
 <a href="https://blog.fleeto.us/post/node-downtime/">https://blog.fleeto.us/post/node-downtime/</a><br>
 <a href="https://llovewxm1314.blog.csdn.net/article/details/108458197">解决kubernetes:v1.18.6-1.19.0 get cs127.0.0.1 connection refused错误</a><br>
-[Fix Context Deadline Exceeded Error in Prometheus Operator](Fix Context Deadline Exceeded Error in Prometheus Operator)</p>
+[Fix Context Deadline Exceeded Error in Prometheus Operator](Fix Context Deadline Exceeded Error in Prometheus Operator)<br>
+稍后阅读：<br>
+<a href="https://www.qikqiak.com/post/k8s-hpa-usage/">Kubernetes HPA 使用详解</a><br>
+<a href="https://blog.51cto.com/14143894/2438026">Kubernetes运维之使用Prometheus全方位监控K8S</a></p>
 ]]></content>
     </entry>
     <entry>
