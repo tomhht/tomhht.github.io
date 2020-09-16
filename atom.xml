@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://tomhht.github.io</id>
     <title>hello, world</title>
-    <updated>2020-09-15T01:53:31.439Z</updated>
+    <updated>2020-09-16T03:54:48.822Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://tomhht.github.io"/>
     <link rel="self" href="https://tomhht.github.io/atom.xml"/>
@@ -34,7 +34,7 @@
 ]]></content>
     </entry>
     <entry>
-        <title type="html"><![CDATA[安装 prometheus operator]]></title>
+        <title type="html"><![CDATA[helm安装kube-prometheus-stack]]></title>
         <id>https://tomhht.github.io/post/an-zhuang-prometheus-operator/</id>
         <link href="https://tomhht.github.io/post/an-zhuang-prometheus-operator/">
         </link>
@@ -196,13 +196,65 @@ prometheus-operated                              ClusterIP   None             &l
 <h1 id="访问prometheus">访问prometheus</h1>
 <p>打开http://192.168.127.132:30098/targets，一部分up一部分down，点Unhealthy<br>
 <img src="https://tomhht.github.io/post-images/1600072559551.png" alt="unhealthy" loading="lazy"></p>
+<h2 id="解决down的部分">解决down的部分</h2>
+<h3 id="etcd的down">etcd的down</h3>
+<blockquote>
+<p>搞了1.5天，搜到的各种资料都无法适用，结合各家之言，再无数次尝试才勉强有结果。</p>
+</blockquote>
+<pre><code>sudo vim /etc/kubernetes/manifests/etcd.yaml
+# 找到
+- --listen-client-urls=https://127.0.0.1:2379,https://192.168.127.132:2379
+# 修改为
+- --listen-client-urls=https://0.0.0.0:2379,http://0.0.0.0:2379
+# 重启全部container（实际上是停止命令，k8s会自动全部启动）
+docker stop $(docker ps -q)
+</code></pre>
+<blockquote>
+<p>挺奇葩的一点是，down变为up后，我又改回原配置，再重启全部container，依然保持up状态，存疑ing。</p>
+</blockquote>
+<h3 id="kube-scheduler">kube-scheduler</h3>
+<pre><code>sudo vim /etc/kubernetes/manifests/kube-scheduler.yaml
+//改为- --bind-address=0.0.0.0
+//删行- --port=0
+//稍等几秒即可
+</code></pre>
+<blockquote>
+<p>这个要特别感谢度娘帮我搜到的<a href="https://llovewxm1314.blog.csdn.net/article/details/108458197">解决kubernetes:v1.18.6-1.19.0 get cs127.0.0.1 connection refused错误</a>。一个port你说你默认等于0干啥，你自己都unhealthy你说prometheus哪儿能监控得到。感谢原作者，n个小时后终于破案。</p>
+</blockquote>
+<h3 id="kube-controller-manager">kube-controller-manager</h3>
+<p>修改套路同kube-scheduler。</p>
+<pre><code>sudo vim /etc/kubernetes/manifests/kube-controller-manager.yaml
+//改为- --bind-address=0.0.0.0
+//删行- --port=0
+//稍等几秒即可
+</code></pre>
+<h3 id="node-exporter">node-exporter</h3>
+<pre><code>kubectl -n monitoring edit ds kube-prometheus-stack-prometheus-node-exporter
+//删行hostNetwork: true
+//稍等几秒即可
+//还没尝试helm给参数的方式，有机会试试override the hostNetwork setting using a values file with -f option
+</code></pre>
+<blockquote>
+<p>特别感谢google来的[Fix Context Deadline Exceeded Error in Prometheus Operator](Fix Context Deadline Exceeded Error in Prometheus Operator)</p>
+</blockquote>
+<h3 id="kube-proxy的down尚未搞定">kube-proxy的down（尚未搞定）</h3>
+<pre><code># 可能用得到的指令
+kubectl -n kube-system edit cm kube-proxy  //改metricsBindAddress: 为 0.0.0.0:10249
+kubectl delete pod -l k8s-app=kube-proxy -n kube-system
+// 按上面的操作，完全没效果，晕
+sudo netstat -ntlp | grep kube
+sudo ss -ntlp | grep kube
+</code></pre>
 <hr>
 <p>参考链接：<br>
 <a href="https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack">https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack</a><br>
 <a href="https://github.com/prometheus-operator/prometheus-operator">https://github.com/prometheus-operator/prometheus-operator</a><br>
 <a href="https://github.com/prometheus-operator/kube-prometheus">https://github.com/prometheus-operator/kube-prometheus</a><br>
 <a href="https://www.bookstack.cn/read/kubernetes-learning-0.2.0/docs-58.Prometheus%20Operator.md">https://www.bookstack.cn/read/kubernetes-learning-0.2.0/docs-58.Prometheus%20Operator.md</a><br>
-<a href="https://sunmite.com/docker/use-prometheus-operator-monitor-kubernetes.html">https://sunmite.com/docker/use-prometheus-operator-monitor-kubernetes.html</a></p>
+<a href="https://www.qikqiak.com/post/prometheus-operator-monitor-etcd/">https://www.qikqiak.com/post/prometheus-operator-monitor-etcd/</a><br>
+<a href="https://blog.fleeto.us/post/node-downtime/">https://blog.fleeto.us/post/node-downtime/</a><br>
+<a href="https://llovewxm1314.blog.csdn.net/article/details/108458197">解决kubernetes:v1.18.6-1.19.0 get cs127.0.0.1 connection refused错误</a><br>
+[Fix Context Deadline Exceeded Error in Prometheus Operator](Fix Context Deadline Exceeded Error in Prometheus Operator)</p>
 ]]></content>
     </entry>
     <entry>
@@ -243,6 +295,10 @@ source ~/.bashrc
 </code></pre>
 <h1 id="安装wget">安装wget</h1>
 <pre><code>sudo yum -y install wget
+</code></pre>
+<h1 id="其他有用的记录">其他有用的记录</h1>
+<pre><code># 找程序所属的包
+yum whatprovides netstat
 </code></pre>
 <hr>
 <p>参考链接：<br>
