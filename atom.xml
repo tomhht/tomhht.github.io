@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://tomhht.github.io</id>
     <title>hello, world</title>
-    <updated>2020-09-16T08:21:27.102Z</updated>
+    <updated>2020-09-16T08:34:33.119Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://tomhht.github.io"/>
     <link rel="self" href="https://tomhht.github.io/atom.xml"/>
@@ -97,7 +97,7 @@ prometheus-kube-prometheus-stack-prometheus-0               3/3     Running   6 
 <blockquote>
 <p>遇到问题往后看。</p>
 </blockquote>
-<h1 id="troubleshooting">Troubleshooting</h1>
+<h1 id="安装过程的troubleshooting">安装过程的Troubleshooting</h1>
 <p>安装过程各种报错，当然主要是镜像pull不下来，尤其是<code>quay.io</code>的镜像。(我的挺奇怪，居然自己pull成功了几个<code>quay.io</code>)</p>
 <h2 id="排查问题">排查问题</h2>
 <pre><code>kubectl -n monitoring describe pods prometheus-kube-prometheus-stack-prometheus-0
@@ -195,7 +195,7 @@ prometheus-operated                              ClusterIP   None             &l
 </code></pre>
 <h1 id="访问prometheus">访问prometheus</h1>
 <p>打开http://192.168.127.132:30098/targets，一部分up一部分down，点Unhealthy<br>
-<img src="https://tomhht.github.io/post-images/1600072559551.png" alt="unhealthy" loading="lazy"></p>
+<img src="https://tomhht.github.io/post-images/1600245194725.png" alt="unhealthy" loading="lazy"></p>
 <h2 id="解决down的部分">解决down的部分</h2>
 <h3 id="etcd的down">etcd的down</h3>
 <blockquote>
