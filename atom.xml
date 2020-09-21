@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://tomhht.github.io</id>
     <title>hello, world</title>
-    <updated>2020-09-21T03:20:18.430Z</updated>
+    <updated>2020-09-21T08:41:50.111Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://tomhht.github.io"/>
     <link rel="self" href="https://tomhht.github.io/atom.xml"/>
@@ -341,6 +341,34 @@ timedatectl status
 <pre><code>sudo yum install bash-completion
 source ~/.bashrc
 </code></pre>
+<h1 id="配置vim">配置vim</h1>
+<pre><code>sudo vim /etc/vim/vimrc.local
+# 粘贴下面的内容进去
+set showcmd
+set showmatch
+set ignorecase
+set smartcase
+set incsearch
+set autowrite
+set hidden
+set nocompatible
+set number
+set autoindent
+set smartindent
+set tabstop=2
+set shiftwidth=2
+set autoread
+set wildmenu
+set expandtab
+if has(&quot;vms&quot;)
+set nobackup
+else
+set backup
+endif
+filetype indent on
+filetype on
+</code></pre>
+<p>保存后，执行<code>source /etc/vim/vimrc</code>。</p>
 <h1 id="安装wget">安装wget</h1>
 <pre><code>sudo yum -y install wget
 </code></pre>
