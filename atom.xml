@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://tomhht.github.io</id>
     <title>hello, world</title>
-    <updated>2020-09-16T10:23:01.650Z</updated>
+    <updated>2020-09-21T03:20:18.430Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://tomhht.github.io"/>
     <link rel="self" href="https://tomhht.github.io/atom.xml"/>
@@ -267,6 +267,26 @@ sudo ss -ntlp | grep kube
 <strong>在Manage里随便选一个</strong><br>
 <img src="https://tomhht.github.io/post-images/1600250887179.png" alt="magic" loading="lazy"><br>
 <img src="https://tomhht.github.io/post-images/1600249787073.png" alt="gorgeous" loading="lazy"></p>
+<h1 id="日志篇章efk">日志篇章EFK</h1>
+<p>Elasticsearch+Fluentd+Kibana<br>
+大部分参考<a href="https://www.qikqiak.com/post/install-efk-stack-on-k8s/">一文彻底搞定 EFK 日志收集</a>。</p>
+<h2 id="几处调整">几处调整</h2>
+<h3 id="elasticsearch-statefulsetyaml">elasticsearch-statefulset.yaml</h3>
+<pre><code># 执行之前，给nodes打es=log标签
+kubectl label nodes --all es=log
+
+#  修改containers的image，因为docker.elastic.co的慢，pull容易失败
+      image: elasticsearch:7.9.1
+
+# 因为是测试，没有rook ceph，因此就替换volumn为emptydir
+#  volumeClaimTemplates: 段落改为了：
+      volumes:
+      - name: data
+        emptyDir: {}
+</code></pre>
+<blockquote>
+<p>用kubectl -n logging get pods观察，发现statefulset的pod是one by one搞的。部署过程不快，看了下，elasticsearch的镜像700多MB。</p>
+</blockquote>
 <hr>
 <p>参考链接：<br>
 <a href="https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack">https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack</a><br>
@@ -278,9 +298,11 @@ sudo ss -ntlp | grep kube
 <a href="https://llovewxm1314.blog.csdn.net/article/details/108458197">解决kubernetes:v1.18.6-1.19.0 get cs127.0.0.1 connection refused错误</a><br>
 <a href="https://vividcode.io/fix-context-deadline-exceeded-error-in-prometheus-operator/">Fix Context Deadline Exceeded Error in Prometheus Operator</a><br>
 <a href="https://devstack.in/2020/05/25/deploy-prometheus-operator-with-helm3-and-private-registry/">Deploy Prometheus Operator with Helm3 and Private Registry</a><br>
+<a href="https://www.qikqiak.com/post/install-efk-stack-on-k8s/">一文彻底搞定 EFK 日志收集</a><br>
 稍后阅读：<br>
 <a href="https://www.qikqiak.com/post/k8s-hpa-usage/">Kubernetes HPA 使用详解</a><br>
-<a href="https://blog.51cto.com/14143894/2438026">Kubernetes运维之使用Prometheus全方位监控K8S</a></p>
+<a href="https://blog.51cto.com/14143894/2438026">Kubernetes运维之使用Prometheus全方位监控K8S</a><br>
+<a href="https://www.cnblogs.com/williamjie/p/10836799.html">Linux操作系统load average过高，kworker占用较多cpu</a></p>
 ]]></content>
     </entry>
     <entry>
