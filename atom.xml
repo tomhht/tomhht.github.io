@@ -2,13 +2,153 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://tomhht.github.io</id>
     <title>hello, world</title>
-    <updated>2020-09-21T08:41:50.111Z</updated>
+    <updated>2020-09-23T03:23:57.243Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://tomhht.github.io"/>
     <link rel="self" href="https://tomhht.github.io/atom.xml"/>
     <logo>https://tomhht.github.io/images/avatar.png</logo>
     <icon>https://tomhht.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, hello, world</rights>
+    <entry>
+        <title type="html"><![CDATA[OpenStack安装调试记录]]></title>
+        <id>https://tomhht.github.io/post/openstack-an-zhuang-diao-shi-ji-lu/</id>
+        <link href="https://tomhht.github.io/post/openstack-an-zhuang-diao-shi-ji-lu/">
+        </link>
+        <updated>2020-09-20T06:39:47.000Z</updated>
+        <summary type="html"><![CDATA[<p>非生产环境，仅学习用。</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>非生产环境，仅学习用。</p>
+<!-- more -->
+<h1 id="实验环境">实验环境</h1>
+<ol>
+<li>Ubuntu Server 20.04 LTS</li>
+<li>Ubuntu 20.04 LTS</li>
+</ol>
+<h1 id="安装devstack">安装DevStack</h1>
+<h2 id="创建用户-stack">创建用户 stack</h2>
+<pre><code>sudo useradd -s /bin/bash -d /opt/stack -m stack
+echo &quot;stack ALL=(ALL) NOPASSWD: ALL&quot; | sudo tee /etc/sudoers.d/stack
+sudo su - stack
+</code></pre>
+<h2 id="下载devstack">下载DevStack</h2>
+<pre><code>git clone https://github.com/openstack/devstack
+cd devstack
+</code></pre>
+<h2 id="创建localconf文件">创建local.conf文件</h2>
+<pre><code>cat &lt;&lt;EOF &gt; local.conf
+[[local|localrc]]
+ADMIN_PASSWORD=secret
+DATABASE_PASSWORD=$ADMIN_PASSWORD
+RABBIT_PASSWORD=$ADMIN_PASSWORD
+SERVICE_PASSWORD=$ADMIN_PASSWORD
+Q_PLUGIN=ml2
+ENABLE_TENANT_VLANS=True
+ML2_VLAN_RANGES=physnet1:1000:2000
+GIT_BASE=http://git.trystack.cn
+NOVNC_REPO=http://git.trystack.cn/kanaka/noVNC.git
+SPICE_REPO=http://git.trystack.cn/git/spice/spice-html5.git
+</code></pre>
+<!-- ## 修改stackrc里的repository
+`stackrc`里面有后面安装要用到的`git clone`的仓库地址，默认的`opendev.org`特别慢，换成`github`好很多。
+```
+sed -i 's/opendev\.org/github\.com/' /opt/stack/devstack/stackrc
+``` -->
+<h2 id="修改pypi国内镜像">修改pypi国内镜像</h2>
+<pre><code>pip3 config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+</code></pre>
+<h2 id="开始安装">开始安装</h2>
+<pre><code>./stack.sh
+</code></pre>
+<h3 id="troubleshooting">Troubleshooting</h3>
+<!-- 1. 遇到从`opendev.org`下载超时的情况，换为`github`地址下载：
+```
+git clone https://github.com/openstack/requirements.git /opt/stack/requirements --branch master
+git clone https://github.com/openstack/keystone.git /opt/stack/keystone --branch master
+git clone https://github.com/openstack/glance.git /opt/stack/glance --branch master
+git clone https://github.com/openstack/cinder.git /opt/stack/cinder --branch master
+git clone https://github.com/openstack/nova.git /opt/stack/nova --branch master
+git clone https://github.com/openstack/neutron.git /opt/stack/neutron --branch master
+git clone https://github.com/openstack/horizon.git /opt/stack/horizon --branch master
+git clone https://github.com/openstack/swift.git /opt/stack/swift --branch master
+``` -->
+<ol>
+<li><code>github etcd</code>无法下载，走梯子。</li>
+</ol>
+<pre><code>curl -x http://192.168.127.1:58591 -fsSL https://github.com/etcd-io/etcd/releases/download/v3.3.12/etcd-v3.3.12-linux-amd64.tar.gz -o /opt/stack/devstack/files/etcd-v3.3.12-linux-amd64.tar.gz
+</code></pre>
+<ol start="2">
+<li>报错<code>table 'broute' is incompatible, use 'nft' tool</code></li>
+</ol>
+<pre><code>update-alternatives --set ebtables /usr/sbin/ebtables-legacy || true
+</code></pre>
+<p>据说是Ubuntu 20.04才会出现的问题，18.04无此问题。感谢<a href="https://www.journaldev.com/30037/install-openstack-ubuntu-devstack">How to Install OpenStack on Ubuntu 18.04 with DevStack</a>文后的回复者Gyan。<br>
+3. 反复遇到<code>Failure creating NET_ID for private</code>问题<br>
+彻底卸了再多装几次。</p>
+<pre><code>./unstack.sh
+./clean.sh
+./stack.sh
+</code></pre>
+<p>之前google baidu bing了n多，该有的<code>ML2_VLAN_RANGES=physnet1:1000:2000</code>、<code>vni_ranges = 1:1000</code>之类也都搞了，再安装依然报同样错。<strong>特别感谢</strong><a href="https://my.oschina.net/haitaohu/blog/3084104">通过devstack，在Vmware中使用Centos7快速安装体验openstack（单节点安装）</a>作者提到的卸载再装的方法。</p>
+<blockquote>
+<p>推测其他一些难解的问题也可以尝试。</p>
+</blockquote>
+<!-- 3. pip版本不够新，遇到下面警示后紧接着就报错，解决方法就是用提示
+问题：
+```
+WARNING: You are using pip version 20.2.2; however, version 20.2.3 is available.
+You should consider upgrading via the '/opt/stack/tempest/.tox/tempest/bin/python -m pip install --upgrade pip' command.
+```
+解决：
+```
+/opt/stack/tempest/.tox/tempest/bin/python -m pip install --upgrade pip
+``` -->
+<h2 id="成功的样子">成功的样子！</h2>
+<pre><code>=========================
+DevStack Component Timing
+ (times are in seconds)  
+=========================
+wait_for_service      26
+pip_install          136
+apt-get                8
+run_process           72
+dbsync                45
+apt-get-update         3
+test_with_retry        3
+osc                  196
+-------------------------
+Unaccounted time     657
+=========================
+Total runtime        1146
+
+
+
+This is your host IP address: 192.168.0.109
+This is your host IPv6 address: ::1
+Horizon is now available at http://192.168.0.109/dashboard
+Keystone is serving at http://192.168.0.109/identity/
+The default users are: admin and demo
+The password: secret
+
+Services are running under systemd unit files.
+For more information see: 
+https://docs.openstack.org/devstack/latest/systemd.html
+
+DevStack Version: victoria
+Change: 1f8109ac29c6222fea2f02ffd487701de29e2355 Merge &quot;Further py2 cleanup for Fedora&quot; 2020-09-19 11:36:12 +0000
+OS Version: Ubuntu 20.04 focal
+
+2020-09-23 02:51:43.021 | stack.sh completed in 1148 seconds.
+</code></pre>
+<hr>
+<p>参考链接：<br>
+<a href="https://docs.openstack.org/devstack/latest/">DevStack</a><br>
+<a href="https://yangsijie666.github.io/2018/09/12/devstack%E5%AE%89%E8%A3%85R%E7%89%88/">openstack学习之devstack安装</a><br>
+<a href="https://www.yunforum.net/group-topic-id-1561.html">devstack安装使用openstack常见问题与解决办法</a><br>
+<a href="https://www.journaldev.com/30037/install-openstack-ubuntu-devstack">How to Install OpenStack on Ubuntu 18.04 with DevStack</a><br>
+<a href="https://my.oschina.net/haitaohu/blog/3084104">通过devstack，在Vmware中使用Centos7快速安装体验openstack（单节点安装）</a><br>
+<a href="http://git.trystack.cn/cgit">TryStack Git Mirror</a></p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[干掉Win10顽固不化的某快速访问固定项]]></title>
         <id>https://tomhht.github.io/post/gan-diao-win10-wan-gu-bu-hua-de-mou-kuai-su-fang-wen-gu-ding-xiang/</id>
@@ -570,25 +710,6 @@ sudo firewall-cmd --reload #这才把curl也打通了，我太难了
 <p>参考链接：<br>
 <a href="https://www.codenong.com/39293441/">https://www.codenong.com/39293441/</a><br>
 <a href="https://www.cnblogs.com/Dev0ps/p/11401530.html">https://www.cnblogs.com/Dev0ps/p/11401530.html</a></p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[圣莲山随笔]]></title>
-        <id>https://tomhht.github.io/post/sheng-lian-shan-sui-bi/</id>
-        <link href="https://tomhht.github.io/post/sheng-lian-shan-sui-bi/">
-        </link>
-        <updated>2020-09-03T06:39:26.000Z</updated>
-        <summary type="html"><![CDATA[<p>上周六去了趟圣莲山，陪人散心，尽管好像只是把他当作车夫。</p>
-]]></summary>
-        <content type="html"><![CDATA[<p>上周六去了趟圣莲山，陪人散心，尽管好像只是把他当作车夫。</p>
-<!-- more -->
-<p>建议买观光车的票，否则从入口到正经爬山点有7里地，走个往返就该打道回府了。<br /><br>
-之前只是听人说过，这次别人想散心，于是推荐此地，想散心的当了全程司机。坐在车上往山里去是越来越凉快，途中也见到了十分陡峭的山，果然房山就是山多。<br /><br>
-散心人腿受伤了，因此到了景区后尽量搞不需要用腿的项目，比如观光车、缆车（内心OS：既然腿不好，来山上干啥）。<br /><br>
-其实本人是第一次坐缆车，稍微往下看看，确实有点腿软。同时想起意大利的一首民歌，就叫缆车，讲的是18几几年的事儿，有个老板搞山区旅游项目，于是搞了人力缆车，并且专门找作曲家写了个曲子，就是缆车，实际上原文的发音是fu ni ku li fu ni ku la，模拟缆车的声音，这个歌曲更准确说应该类似于咱们的劳动号子，大家边唱边使劲拉绳子。曲子非常欢快，进行曲的那种感觉，很多歌剧演员都唱过，比如著名的帕瓦罗蒂。但我第一次听是在芒果台的声入人心，一遍就喜欢上了。我妈觉得有些段落像是鬼子进村。<br /><br>
-缆车上山后，直奔观光车司机推荐的必去景点，一个叫圣莲宝塔，一个叫莲子峰。圣莲宝塔就是后人翻建的一个建筑，每层都绘制了佛教的故事。其实更喜欢纯的古建筑，或者以古修古的那种，可惜这个宝塔之前彻底倒塌了。塔旁边的山上还有题字，开始还以为是书法家才会题字，可这个字怎么看都觉得挺小学生的（没有侮辱小学生的意思），一直也联想不到是哪位大家的风格。正暗自感叹见识太少，忽听得旁人百度的结果，题字人正是宝塔翻建的出资人之一，心里的大石头终于落地，看来自己审美没出大问题。旁人也怀同样感觉，大家都释然了。当然出资人的功德肯定是大大的。<br /><br>
-实际上两个景点带来的感觉没有太震撼，但是游玩这种事情，过程才是核心。中间还路过一个景点叫八仙洞，就是在山上凿穿了个洞，看洞壁的坑坑洼洼，猜测应该是前人一凿一斧的心血，洞内凉气十足，且洞顶还有渗水滴下，我们感叹应该穿棉袄进来。后来散心人在洞外忽悠后来者，说洞里租军大衣。一个几岁的小男孩说什么也不进去，跟爸妈说里面可怕，我在想估计他们一家就要就此打住了，结果孩子爸妈想了个办法，把孩子抱上让孩子趴肩头挡住眼睛，直接就进去了。这都行，孩子就是孩子。<br /><br>
-之后我们找了个僻静处吃午饭，说实话背了一路，烧饼、香肠还有水，累死我了。我爸买的这香肠也有个性，外面塑料皮剥开，里面居然还有一层塑料膜，我还没叫出来，散心人已经一口啃下并吞下了一角塑料膜。这肠有个性，这人更有个性。</p>
 ]]></content>
     </entry>
 </feed>
