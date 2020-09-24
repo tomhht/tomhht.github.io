@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://tomhht.github.io</id>
     <title>hello, world</title>
-    <updated>2020-09-23T03:23:57.243Z</updated>
+    <updated>2020-09-24T10:01:37.113Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://tomhht.github.io"/>
     <link rel="self" href="https://tomhht.github.io/atom.xml"/>
@@ -24,17 +24,28 @@
 <li>Ubuntu Server 20.04 LTS</li>
 <li>Ubuntu 20.04 LTS</li>
 </ol>
-<h1 id="安装devstack">安装DevStack</h1>
+<h1 id="准备工作">准备工作</h1>
 <h2 id="创建用户-stack">创建用户 stack</h2>
 <pre><code>sudo useradd -s /bin/bash -d /opt/stack -m stack
 echo &quot;stack ALL=(ALL) NOPASSWD: ALL&quot; | sudo tee /etc/sudoers.d/stack
 sudo su - stack
 </code></pre>
 <h2 id="下载devstack">下载DevStack</h2>
-<pre><code>git clone https://github.com/openstack/devstack
+<pre><code>git clone http://git.trystack.cn/openstack/devstack
 cd devstack
 </code></pre>
-<h2 id="创建localconf文件">创建local.conf文件</h2>
+<h2 id="修改pypi国内镜像">修改pypi国内镜像</h2>
+<pre><code>pip3 config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+</code></pre>
+<p>否则容易pip失败。</p>
+<h2 id="修改ebtables的指向">修改ebtables的指向</h2>
+<pre><code>sudo update-alternatives --set ebtables /usr/sbin/ebtables-legacy || true
+</code></pre>
+<p>否则对于Ubuntu 20.04会报错<code>table 'broute' is incompatible, use 'nft' tool</code>。<br>
+据说是Ubuntu 20.04才会出现的问题，18.04无此问题。感谢<a href="https://www.journaldev.com/30037/install-openstack-ubuntu-devstack">How to Install OpenStack on Ubuntu 18.04 with DevStack</a>文后的回复者Gyan。</p>
+<h1 id="安装devstack">安装DevStack</h1>
+<h2 id="单节点模式single-node">单节点模式single-node</h2>
+<h3 id="创建localconf文件">创建local.conf文件</h3>
 <pre><code>cat &lt;&lt;EOF &gt; local.conf
 [[local|localrc]]
 ADMIN_PASSWORD=secret
@@ -48,61 +59,11 @@ GIT_BASE=http://git.trystack.cn
 NOVNC_REPO=http://git.trystack.cn/kanaka/noVNC.git
 SPICE_REPO=http://git.trystack.cn/git/spice/spice-html5.git
 </code></pre>
-<!-- ## 修改stackrc里的repository
-`stackrc`里面有后面安装要用到的`git clone`的仓库地址，默认的`opendev.org`特别慢，换成`github`好很多。
-```
-sed -i 's/opendev\.org/github\.com/' /opt/stack/devstack/stackrc
-``` -->
-<h2 id="修改pypi国内镜像">修改pypi国内镜像</h2>
-<pre><code>pip3 config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
-</code></pre>
-<h2 id="开始安装">开始安装</h2>
+<h3 id="开始安装">开始安装</h3>
 <pre><code>./stack.sh
 </code></pre>
-<h3 id="troubleshooting">Troubleshooting</h3>
-<!-- 1. 遇到从`opendev.org`下载超时的情况，换为`github`地址下载：
-```
-git clone https://github.com/openstack/requirements.git /opt/stack/requirements --branch master
-git clone https://github.com/openstack/keystone.git /opt/stack/keystone --branch master
-git clone https://github.com/openstack/glance.git /opt/stack/glance --branch master
-git clone https://github.com/openstack/cinder.git /opt/stack/cinder --branch master
-git clone https://github.com/openstack/nova.git /opt/stack/nova --branch master
-git clone https://github.com/openstack/neutron.git /opt/stack/neutron --branch master
-git clone https://github.com/openstack/horizon.git /opt/stack/horizon --branch master
-git clone https://github.com/openstack/swift.git /opt/stack/swift --branch master
-``` -->
-<ol>
-<li><code>github etcd</code>无法下载，走梯子。</li>
-</ol>
-<pre><code>curl -x http://192.168.127.1:58591 -fsSL https://github.com/etcd-io/etcd/releases/download/v3.3.12/etcd-v3.3.12-linux-amd64.tar.gz -o /opt/stack/devstack/files/etcd-v3.3.12-linux-amd64.tar.gz
-</code></pre>
-<ol start="2">
-<li>报错<code>table 'broute' is incompatible, use 'nft' tool</code></li>
-</ol>
-<pre><code>update-alternatives --set ebtables /usr/sbin/ebtables-legacy || true
-</code></pre>
-<p>据说是Ubuntu 20.04才会出现的问题，18.04无此问题。感谢<a href="https://www.journaldev.com/30037/install-openstack-ubuntu-devstack">How to Install OpenStack on Ubuntu 18.04 with DevStack</a>文后的回复者Gyan。<br>
-3. 反复遇到<code>Failure creating NET_ID for private</code>问题<br>
-彻底卸了再多装几次。</p>
-<pre><code>./unstack.sh
-./clean.sh
-./stack.sh
-</code></pre>
-<p>之前google baidu bing了n多，该有的<code>ML2_VLAN_RANGES=physnet1:1000:2000</code>、<code>vni_ranges = 1:1000</code>之类也都搞了，再安装依然报同样错。<strong>特别感谢</strong><a href="https://my.oschina.net/haitaohu/blog/3084104">通过devstack，在Vmware中使用Centos7快速安装体验openstack（单节点安装）</a>作者提到的卸载再装的方法。</p>
-<blockquote>
-<p>推测其他一些难解的问题也可以尝试。</p>
-</blockquote>
-<!-- 3. pip版本不够新，遇到下面警示后紧接着就报错，解决方法就是用提示
-问题：
-```
-WARNING: You are using pip version 20.2.2; however, version 20.2.3 is available.
-You should consider upgrading via the '/opt/stack/tempest/.tox/tempest/bin/python -m pip install --upgrade pip' command.
-```
-解决：
-```
-/opt/stack/tempest/.tox/tempest/bin/python -m pip install --upgrade pip
-``` -->
-<h2 id="成功的样子">成功的样子！</h2>
+<p>如遇到问题，跳至<a href="#Troubleshooting">Troubleshooting</a>。<br>
+<strong>成功！</strong></p>
 <pre><code>=========================
 DevStack Component Timing
  (times are in seconds)  
@@ -139,6 +100,130 @@ OS Version: Ubuntu 20.04 focal
 
 2020-09-23 02:51:43.021 | stack.sh completed in 1148 seconds.
 </code></pre>
+<h2 id="多节点模式multi-node">多节点模式multi-node</h2>
+<h3 id="配置ssh">配置ssh</h3>
+<p>供stack访问各节点。</p>
+<pre><code>mkdir ~/.ssh; chmod 700 ~/.ssh
+echo &quot;ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCyYjfgyPazTvGpd8OaAvtU2utL8W6gWC4JdRS1J95GhNNfQd657yO6s1AH5KYQWktcE6FO/xNUC2reEXSGC7ezy+sGO1kj9Limv5vrvNHvF1+wts0Cmyx61D2nQw35/Qz8BvpdJANL7VwP/cFI/p3yhvx2lsnjFE3hN8xRB2LtLUopUSVdBwACOVUmH2G+2BWMJDjVINd2DPqRIA4Zhy09KJ3O1Joabr0XpQL0yt/I9x8BVHdAx6l9U0tMg9dj5+tAjZvMAFfye3PJcYwwsfJoFxC8w/SLtqlFX7Ehw++8RtvomvuipLdmWCy+T9hIkl+gHYE4cS3OIqXH7f49jdJf jesse@spacey.local&quot; &gt; ~/.ssh/authorized_keys
+</code></pre>
+<p>下面分cluster controller  和  compute node。</p>
+<h3 id="cluster-controller">cluster controller</h3>
+<h4 id="创建localconf文件-2">创建local.conf文件</h4>
+<pre><code>cat &lt;&lt;EOF &gt; local.conf
+[[local|localrc]]
+HOST_IP=192.168.0.109
+FIXED_RANGE=10.4.128.0/20
+FLOATING_RANGE=192.168.0.128/25
+LOGFILE=/opt/stack/logs/stack.sh.log
+ADMIN_PASSWORD=secret
+DATABASE_PASSWORD=$ADMIN_PASSWORD
+RABBIT_PASSWORD=$ADMIN_PASSWORD
+SERVICE_PASSWORD=$ADMIN_PASSWORD
+GIT_BASE=http://git.trystack.cn
+NOVNC_REPO=http://git.trystack.cn/kanaka/noVNC.git
+SPICE_REPO=http://git.trystack.cn/git/spice/spice-html5.git
+Q_PLUGIN=ml2
+ENABLE_TENANT_VLANS=True
+ML2_VLAN_RANGES=physnet1:1000:2000
+</code></pre>
+<h4 id="开始安装-2">开始安装</h4>
+<pre><code>./stack.sh
+</code></pre>
+<p>如遇到问题，跳至<a href="#Troubleshooting">Troubleshooting</a>。<br>
+<strong>成功！</strong></p>
+<pre><code>=========================
+DevStack Component Timing
+ (times are in seconds)  
+=========================
+wait_for_service      26
+pip_install          172
+apt-get               58
+run_process           59
+dbsync                46
+apt-get-update         4
+test_with_retry        3
+osc                  227
+-------------------------
+Unaccounted time     533
+=========================
+Total runtime        1128
+
+
+
+This is your host IP address: 192.168.0.109
+This is your host IPv6 address: ::1
+Horizon is now available at http://192.168.0.109/dashboard
+Keystone is serving at http://192.168.0.109/identity/
+The default users are: admin and demo
+The password: secret
+
+Services are running under systemd unit files.
+For more information see: 
+https://docs.openstack.org/devstack/latest/systemd.html
+
+DevStack Version: victoria
+Change: 1f8109ac29c6222fea2f02ffd487701de29e2355 Merge &quot;Further py2 cleanup for Fedora&quot; 2020-09-19 11:36:12 +0000
+OS Version: Ubuntu 20.04 focal
+</code></pre>
+<h3 id="compute-node">compute node</h3>
+<h4 id="创建localconf文件-3">创建local.conf文件</h4>
+<pre><code>cat &lt;&lt;EOF &gt; local.conf
+[[local|localrc]]
+HOST_IP=192.168.0.110
+FIXED_RANGE=10.4.128.0/20
+FLOATING_RANGE=192.168.0.128/25
+LOGFILE=/opt/stack/logs/stack.sh.log
+ADMIN_PASSWORD=secret
+DATABASE_PASSWORD=$ADMIN_PASSWORD
+RABBIT_PASSWORD=$ADMIN_PASSWORD
+SERVICE_PASSWORD=$ADMIN_PASSWORD
+DATABASE_TYPE=mysql
+SERVICE_HOST=192.168.0.109
+MYSQL_HOST=$SERVICE_HOST
+RABBIT_HOST=$SERVICE_HOST
+GLANCE_HOSTPORT=$SERVICE_HOST:9292
+ENABLED_SERVICES=n-cpu,q-agt,c-vol,placement-client
+NOVA_VNC_ENABLED=True
+NOVNCPROXY_URL=&quot;http://$SERVICE_HOST:6080/vnc_lite.html&quot;
+VNCSERVER_LISTEN=$HOST_IP
+VNCSERVER_PROXYCLIENT_ADDRESS=$VNCSERVER_LISTEN
+GIT_BASE=http://git.trystack.cn
+NOVNC_REPO=http://git.trystack.cn/kanaka/noVNC.git
+SPICE_REPO=http://git.trystack.cn/git/spice/spice-html5.git
+</code></pre>
+<h1 id="troubleshooting">Troubleshooting</h1>
+<ol>
+<li><code>github etcd</code>无法下载，走梯子。</li>
+</ol>
+<pre><code>curl -x http://192.168.127.1:58591 -fsSL https://github.com/etcd-io/etcd/releases/download/v3.3.12/etcd-v3.3.12-linux-amd64.tar.gz -o /opt/stack/devstack/files/etcd-v3.3.12-linux-amd64.tar.gz
+</code></pre>
+<ol start="2">
+<li>提示pip版本不够新<br>
+出现如下警示，然后就报错停止。试着运行<code>./stack.sh</code>重装，应能解决。</li>
+</ol>
+<pre><code>WARNING: You are using pip version 20.2.2; however, version 20.2.3 is available.
+You should consider upgrading via the '/opt/stack/tempest/.tox/tempest/bin/python -m pip install --upgrade pip' command.
+</code></pre>
+<ol start="3">
+<li>反复遇到<code>Failure creating NET_ID for private</code>问题<br>
+清理以后再多装几次。</li>
+</ol>
+<pre><code>./unstack.sh
+./clean.sh
+./stack.sh
+</code></pre>
+<p>之前google baidu bing了n多，该有的<code>ML2_VLAN_RANGES=physnet1:1000:2000</code>、<code>vni_ranges = 1:1000</code>之类也都搞了，再安装依然报同样错。<strong>特别感谢</strong><a href="https://my.oschina.net/haitaohu/blog/3084104">通过devstack，在Vmware中使用Centos7快速安装体验openstack（单节点安装）</a>作者提到的卸载再装的方法。</p>
+<blockquote>
+<p>推测其他一些难解的问题也可以尝试该法。</p>
+</blockquote>
+<ol start="4">
+<li>其他错误<br>
+做好心理准备，安装过程可能产生各种错误，然后就自己停下来。如果不是上面几种错误，可以简单尝试重装1..2..n次，具体几次，是个玄学。</li>
+</ol>
+<h2 id="control-node">control-node</h2>
+<pre><code>sudo ufw allow 80/tcp
+sudo ufw allow 3306/tcp
+</code></pre>
 <hr>
 <p>参考链接：<br>
 <a href="https://docs.openstack.org/devstack/latest/">DevStack</a><br>
@@ -146,7 +231,9 @@ OS Version: Ubuntu 20.04 focal
 <a href="https://www.yunforum.net/group-topic-id-1561.html">devstack安装使用openstack常见问题与解决办法</a><br>
 <a href="https://www.journaldev.com/30037/install-openstack-ubuntu-devstack">How to Install OpenStack on Ubuntu 18.04 with DevStack</a><br>
 <a href="https://my.oschina.net/haitaohu/blog/3084104">通过devstack，在Vmware中使用Centos7快速安装体验openstack（单节点安装）</a><br>
-<a href="http://git.trystack.cn/cgit">TryStack Git Mirror</a></p>
+<a href="http://git.trystack.cn/cgit">TryStack Git Mirror</a><br>
+<a href="https://docs.openstack.org/devstack/latest/guides/multinode-lab.html">Multi-Node Lab</a><br>
+<a href="https://bugs.launchpad.net/devstack/+bug/1726260">devstack fails while running ./stack.sh in master/queens in ubuntu 16.04 while starting n-cpu</a></p>
 ]]></content>
     </entry>
     <entry>
