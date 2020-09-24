@@ -2,13 +2,91 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://tomhht.github.io</id>
     <title>hello, world</title>
-    <updated>2020-09-24T10:01:37.113Z</updated>
+    <updated>2020-09-24T10:04:30.887Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://tomhht.github.io"/>
     <link rel="self" href="https://tomhht.github.io/atom.xml"/>
     <logo>https://tomhht.github.io/images/avatar.png</logo>
     <icon>https://tomhht.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, hello, world</rights>
+    <entry>
+        <title type="html"><![CDATA[学会提问]]></title>
+        <id>https://tomhht.github.io/post/xue-hui-ti-wen/</id>
+        <link href="https://tomhht.github.io/post/xue-hui-ti-wen/">
+        </link>
+        <updated>2020-09-24T06:18:22.000Z</updated>
+        <summary type="html"><![CDATA[<p>读《学会提问》第十一版有感。</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>读《学会提问》第十一版有感。</p>
+<!-- more -->
+<h1 id="2种思维">2种思维</h1>
+<h2 id="海绵式思维">海绵式思维</h2>
+<p>海纳百川，全盘接受。</p>
+<h2 id="淘金式思维">淘金式思维</h2>
+<p>海纳百川，弃其糟粕取其精华。</p>
+<h1 id="2种批判性思维">2种批判性思维</h1>
+<h2 id="弱势批判性思维">弱势批判性思维</h2>
+<p>固执己见，找各种资源证明己见。</p>
+<h2 id="强势批判性思维">强势批判性思维</h2>
+<p>主张客观，依据各种资源综合分析出结论。</p>
+<h1 id="2种论题">2种论题</h1>
+<h2 id="描述性论述-descriptive-issues">描述性论述 descriptive issues</h2>
+<p>关于”是什么“、”是否“的问题。</p>
+<h2 id="规定性论题-prescriptive-issues">规定性论题 prescriptive issues</h2>
+<p>关于”什么该/不该做“、”什么是对/错“、”什么是好/坏“的问题。</p>
+<h1 id="找结论的方法">找结论的方法</h1>
+<h2 id="找论题">找论题</h2>
+<h2 id="找指示词">找指示词</h2>
+<ul>
+<li>因此（consequently）</li>
+<li>表明（suggests that）</li>
+<li>由此可知（therefore）</li>
+<li>由此得出（thus）</li>
+<li>因此可以断定（it follows that）</li>
+<li>我要说的重点是（the point I'm trying to make is）</li>
+<li>显示出（shows that）</li>
+<li>证明（proves that）</li>
+<li>告诉我们（indicates that）</li>
+<li>问题的实质是（the truth of the matter is）</li>
+</ul>
+<h2 id="找篇头篇尾">找篇头篇尾</h2>
+<h2 id="排除法">排除法</h2>
+<p>以下是不可能作为结论的东西：</p>
+<ul>
+<li>例证</li>
+<li>数据</li>
+<li>定义</li>
+<li>背景材料</li>
+<li>证据</li>
+</ul>
+<h2 id="检查交流语境和作者背景">检查交流语境和作者背景</h2>
+<h1 id="理由-结论-论证">理由 + 结论 = 论证</h1>
+<p>只有结论的叫纯论点（mere opinion），无法评判其价值。</p>
+<h1 id="理由">理由</h1>
+<h2 id="通过提示词找理由">通过提示词找理由</h2>
+<ul>
+<li>由于（as a result of）</li>
+<li>因为这个原因（for the reason that）</li>
+<li>因为这个事实（because of the fact that）</li>
+<li>鉴于（in view of）</li>
+<li>由以下材料支撑（is supported by）</li>
+<li>因为证据显示（because the evidence is）</li>
+<li>研究显示（studies show）</li>
+<li>第一、第二、第三（first...second...third）</li>
+</ul>
+<h2 id="理由的类型">理由的类型</h2>
+<p>很多理由都是提供证据（evidence）的一些陈述。证据包括：</p>
+<ul>
+<li>事实</li>
+<li>研究成果</li>
+<li>生活实例</li>
+<li>统计数据</li>
+<li>专家意见</li>
+<li>当事人证言</li>
+<li>类比</li>
+</ul>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[OpenStack安装调试记录]]></title>
         <id>https://tomhht.github.io/post/openstack-an-zhuang-diao-shi-ji-lu/</id>
@@ -769,34 +847,6 @@ Address 1: 10.108.142.200 httpd-svc.default.svc.cluster.local
 画龙前行，志玲姐姐忽然来一句右转立刻左转，我这路口到底怎么走啊，遂决定直接左转，进了左转车道等红灯，发现右转后走10米果然有左转路，WTF。左转车道硬着头皮左转完了，终于找到一个路口直接掉头，走上了康庄大道。<br /><br>
 转完了突然道路宽阔了起来，路上也没几辆车，于是let's go，4档的干活，这感觉就是乌龟爬到了兔子身上。<br /><br>
 到校后，等了几个钟头，中途又开着出去练练手，接上娃后返程的路途也算有惊无险，终于平安的运送回家。庆幸的是这一路没有倒车入库、侧方停车之类的技术活。万幸。</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[k8s集群跨节点pods无法ping通以及无法curl]]></title>
-        <id>https://tomhht.github.io/post/k8s-ji-qun-kua-jie-dian-pods-wu-fa-ping-tong/</id>
-        <link href="https://tomhht.github.io/post/k8s-ji-qun-kua-jie-dian-pods-wu-fa-ping-tong/">
-        </link>
-        <updated>2020-09-03T10:33:25.000Z</updated>
-        <summary type="html"><![CDATA[<p>除了k8s要求的端口要开，worker node上面的<code>8472/udp（vxlan backend）</code>也得开。（尽管参考链接里明确的是worker node要开，但master似乎也得开，否则master里面的coredns无法为worker node服务）</p>
-]]></summary>
-        <content type="html"><![CDATA[<p>除了k8s要求的端口要开，worker node上面的<code>8472/udp（vxlan backend）</code>也得开。（尽管参考链接里明确的是worker node要开，但master似乎也得开，否则master里面的coredns无法为worker node服务）</p>
-<!-- more -->
-<p>用<code>nmcli</code>查看，发现flannel 用到的是<code>vxlan backend</code>，因此需要打开<code>8472/udp</code>。<br  /><br>
-打开后，发现Ubuntu的node可以被ping通，同时如果上面跑着<code>httpd</code>，其他node也可以<code>curl</code>到内容；而CentOS只能被ping通，<code>curl 10.244.2.19</code>的时候会显示<code>curl: (7) Failed to connect to 10.244.2.19 port 80: No route to host</code>。<br /><br>
-查了n多资料，几乎都是关闭防火墙，关闭后确实能解决，但我想这不是生产环境中的做法。最终在这位仁兄Louis He的博文<a href="https://www.cnblogs.com/Dev0ps/p/11401530.html">Kubernetes集群开启Firewall</a>中找到答案<code>add-masquerade</code>。同时也谢谢让我找到8472端口的仁兄<a href="https://www.codenong.com/39293441/">关于网络：Kubernetes集群所需的端口</a>。</p>
-<pre><code># Ubuntu
-sudo ufw allow 8472/udp #搞定
-
-# CentOS
-sudo firewall-cmd --zone=public --add-port=8472/udp --permanent
-sudo firewall-cmd --reload #这步搞完只能被ping通，curl时是No route to host，头疼死了
-sudo firewall-cmd --add-masquerade --permanent
-sudo firewall-cmd --reload #这才把curl也打通了，我太难了
-</code></pre>
-<hr>
-<p>参考链接：<br>
-<a href="https://www.codenong.com/39293441/">https://www.codenong.com/39293441/</a><br>
-<a href="https://www.cnblogs.com/Dev0ps/p/11401530.html">https://www.cnblogs.com/Dev0ps/p/11401530.html</a></p>
 ]]></content>
     </entry>
 </feed>
