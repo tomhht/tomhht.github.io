@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://tomhht.github.io</id>
     <title>hello, world</title>
-    <updated>2020-09-24T10:04:30.887Z</updated>
+    <updated>2020-09-25T08:43:27.692Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://tomhht.github.io"/>
     <link rel="self" href="https://tomhht.github.io/atom.xml"/>
@@ -103,6 +103,13 @@
 <li>Ubuntu 20.04 LTS</li>
 </ol>
 <h1 id="准备工作">准备工作</h1>
+<h2 id="内存配足了">内存配足了</h2>
+<p>不管实机虚机，内存≥6G。<br>
+血的教训，4G内存装一半就报错，本以为安装文件配置问题，结果偶然发现<code>Out of memory: Killed process 79546 (mysqld)</code>。记录查错的多种命令：</p>
+<pre><code>sudo egrep -i -r 'killed process' /var/log
+dmesg | grep -i 'out of memory'
+sudo journalctl -kx | grep -i 'out of memory'
+</code></pre>
 <h2 id="创建用户-stack">创建用户 stack</h2>
 <pre><code>sudo useradd -s /bin/bash -d /opt/stack -m stack
 echo &quot;stack ALL=(ALL) NOPASSWD: ALL&quot; | sudo tee /etc/sudoers.d/stack
@@ -126,16 +133,20 @@ cd devstack
 <h3 id="创建localconf文件">创建local.conf文件</h3>
 <pre><code>cat &lt;&lt;EOF &gt; local.conf
 [[local|localrc]]
+HOST_IP=192.168.127.132
+LOGFILE=/opt/stack/logs/stack.sh.log
 ADMIN_PASSWORD=secret
 DATABASE_PASSWORD=$ADMIN_PASSWORD
 RABBIT_PASSWORD=$ADMIN_PASSWORD
 SERVICE_PASSWORD=$ADMIN_PASSWORD
-Q_PLUGIN=ml2
-ENABLE_TENANT_VLANS=True
-ML2_VLAN_RANGES=physnet1:1000:2000
 GIT_BASE=http://git.trystack.cn
 NOVNC_REPO=http://git.trystack.cn/kanaka/noVNC.git
 SPICE_REPO=http://git.trystack.cn/git/spice/spice-html5.git
+</code></pre>
+<p>以下三行似乎没必要，没用他们也安装成功了，做个记录：</p>
+<pre><code>Q_PLUGIN=ml2
+ENABLE_TENANT_VLANS=True
+ML2_VLAN_RANGES=physnet1:1000:2000
 </code></pre>
 <h3 id="开始安装">开始安装</h3>
 <pre><code>./stack.sh
@@ -298,10 +309,11 @@ You should consider upgrading via the '/opt/stack/tempest/.tox/tempest/bin/pytho
 <li>其他错误<br>
 做好心理准备，安装过程可能产生各种错误，然后就自己停下来。如果不是上面几种错误，可以简单尝试重装1..2..n次，具体几次，是个玄学。</li>
 </ol>
-<h2 id="control-node">control-node</h2>
-<pre><code>sudo ufw allow 80/tcp
+<!-- ## control-node
+```
+sudo ufw allow 80/tcp
 sudo ufw allow 3306/tcp
-</code></pre>
+``` -->
 <hr>
 <p>参考链接：<br>
 <a href="https://docs.openstack.org/devstack/latest/">DevStack</a><br>
@@ -311,7 +323,8 @@ sudo ufw allow 3306/tcp
 <a href="https://my.oschina.net/haitaohu/blog/3084104">通过devstack，在Vmware中使用Centos7快速安装体验openstack（单节点安装）</a><br>
 <a href="http://git.trystack.cn/cgit">TryStack Git Mirror</a><br>
 <a href="https://docs.openstack.org/devstack/latest/guides/multinode-lab.html">Multi-Node Lab</a><br>
-<a href="https://bugs.launchpad.net/devstack/+bug/1726260">devstack fails while running ./stack.sh in master/queens in ubuntu 16.04 while starting n-cpu</a></p>
+<a href="https://bugs.launchpad.net/devstack/+bug/1726260">devstack fails while running ./stack.sh in master/queens in ubuntu 16.04 while starting n-cpu</a><br>
+<a href="https://www.cnblogs.com/duanxz/p/10185946.html">Linux进程被杀掉（OOM killer），查看系统日志</a></p>
 ]]></content>
     </entry>
     <entry>
@@ -684,7 +697,8 @@ yum whatprovides netstat
 <hr>
 <p>参考链接：<br>
 <a href="https://www.cnblogs.com/fengdejiyixx/p/11592417.html">Centos和Ubuntu系统最小化安装基础命令</a><br>
-<a href="https://linuxconfig.org/ubuntu-20-04-server-installation">Ubuntu 20.04 Server Installation</a></p>
+<a href="https://linuxconfig.org/ubuntu-20-04-server-installation">Ubuntu 20.04 Server Installation</a><br>
+<a href="https://juejin.im/post/6844904149822210056">写给工程师的 Ubuntu 20.04 最佳配置指南</a></p>
 ]]></content>
     </entry>
     <entry>
