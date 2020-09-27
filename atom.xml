@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://tomhht.github.io</id>
     <title>hello, world</title>
-    <updated>2020-09-25T09:58:46.042Z</updated>
+    <updated>2020-09-27T09:45:32.982Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://tomhht.github.io"/>
     <link rel="self" href="https://tomhht.github.io/atom.xml"/>
@@ -189,16 +189,18 @@ OS Version: Ubuntu 20.04 focal
 
 2020-09-23 02:51:43.021 | stack.sh completed in 1148 seconds.
 </code></pre>
-<h2 id="多节点模式multi-node">多节点模式multi-node</h2>
-<h3 id="配置ssh">配置ssh</h3>
-<p>供stack访问各节点。</p>
-<pre><code>mkdir ~/.ssh; chmod 700 ~/.ssh
-echo &quot;ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCyYjfgyPazTvGpd8OaAvtU2utL8W6gWC4JdRS1J95GhNNfQd657yO6s1AH5KYQWktcE6FO/xNUC2reEXSGC7ezy+sGO1kj9Limv5vrvNHvF1+wts0Cmyx61D2nQw35/Qz8BvpdJANL7VwP/cFI/p3yhvx2lsnjFE3hN8xRB2LtLUopUSVdBwACOVUmH2G+2BWMJDjVINd2DPqRIA4Zhy09KJ3O1Joabr0XpQL0yt/I9x8BVHdAx6l9U0tMg9dj5+tAjZvMAFfye3PJcYwwsfJoFxC8w/SLtqlFX7Ehw++8RtvomvuipLdmWCy+T9hIkl+gHYE4cS3OIqXH7f49jdJf jesse@spacey.local&quot; &gt; ~/.ssh/authorized_keys
-</code></pre>
-<p>下面分cluster controller  和  compute node。</p>
-<h3 id="cluster-controller">cluster controller</h3>
-<h4 id="创建localconf文件-2">创建local.conf文件</h4>
-<pre><code>cat &lt;&lt;EOF &gt; local.conf
+<!-- ## 多节点模式multi-node
+### 配置ssh
+供stack访问各节点。
+```
+mkdir ~/.ssh; chmod 700 ~/.ssh
+echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCyYjfgyPazTvGpd8OaAvtU2utL8W6gWC4JdRS1J95GhNNfQd657yO6s1AH5KYQWktcE6FO/xNUC2reEXSGC7ezy+sGO1kj9Limv5vrvNHvF1+wts0Cmyx61D2nQw35/Qz8BvpdJANL7VwP/cFI/p3yhvx2lsnjFE3hN8xRB2LtLUopUSVdBwACOVUmH2G+2BWMJDjVINd2DPqRIA4Zhy09KJ3O1Joabr0XpQL0yt/I9x8BVHdAx6l9U0tMg9dj5+tAjZvMAFfye3PJcYwwsfJoFxC8w/SLtqlFX7Ehw++8RtvomvuipLdmWCy+T9hIkl+gHYE4cS3OIqXH7f49jdJf jesse@spacey.local" > ~/.ssh/authorized_keys
+```
+下面分cluster controller  和  compute node。
+### cluster controller
+#### 创建local.conf文件
+```
+cat <<EOF > local.conf
 [[local|localrc]]
 HOST_IP=192.168.0.109
 FIXED_RANGE=10.4.128.0/20
@@ -214,13 +216,15 @@ SPICE_REPO=http://git.trystack.cn/git/spice/spice-html5.git
 Q_PLUGIN=ml2
 ENABLE_TENANT_VLANS=True
 ML2_VLAN_RANGES=physnet1:1000:2000
-</code></pre>
-<h4 id="开始安装-2">开始安装</h4>
-<pre><code>./stack.sh
-</code></pre>
-<p>如遇到问题，跳至<a href="#Troubleshooting">Troubleshooting</a>。<br>
-<strong>成功！</strong></p>
-<pre><code>=========================
+```
+#### 开始安装
+```
+./stack.sh
+```
+如遇到问题，跳至<a href="#Troubleshooting">Troubleshooting</a>。
+**成功！**
+```
+=========================
 DevStack Component Timing
  (times are in seconds)  
 =========================
@@ -251,12 +255,13 @@ For more information see:
 https://docs.openstack.org/devstack/latest/systemd.html
 
 DevStack Version: victoria
-Change: 1f8109ac29c6222fea2f02ffd487701de29e2355 Merge &quot;Further py2 cleanup for Fedora&quot; 2020-09-19 11:36:12 +0000
+Change: 1f8109ac29c6222fea2f02ffd487701de29e2355 Merge "Further py2 cleanup for Fedora" 2020-09-19 11:36:12 +0000
 OS Version: Ubuntu 20.04 focal
-</code></pre>
-<h3 id="compute-node">compute node</h3>
-<h4 id="创建localconf文件-3">创建local.conf文件</h4>
-<pre><code>cat &lt;&lt;EOF &gt; local.conf
+```
+### compute node
+#### 创建local.conf文件
+```
+cat <<EOF > local.conf
 [[local|localrc]]
 HOST_IP=192.168.0.110
 FIXED_RANGE=10.4.128.0/20
@@ -273,14 +278,14 @@ RABBIT_HOST=$SERVICE_HOST
 GLANCE_HOSTPORT=$SERVICE_HOST:9292
 ENABLED_SERVICES=n-cpu,q-agt,c-vol,placement-client
 NOVA_VNC_ENABLED=True
-NOVNCPROXY_URL=&quot;http://$SERVICE_HOST:6080/vnc_lite.html&quot;
+NOVNCPROXY_URL="http://$SERVICE_HOST:6080/vnc_lite.html"
 VNCSERVER_LISTEN=$HOST_IP
 VNCSERVER_PROXYCLIENT_ADDRESS=$VNCSERVER_LISTEN
 GIT_BASE=http://git.trystack.cn
 NOVNC_REPO=http://git.trystack.cn/kanaka/noVNC.git
 SPICE_REPO=http://git.trystack.cn/git/spice/spice-html5.git
-</code></pre>
-<h1 id="troubleshooting">Troubleshooting</h1>
+``` -->
+<h2 id="troubleshooting">Troubleshooting</h2>
 <ol>
 <li><code>github etcd</code>无法下载，走梯子。</li>
 </ol>
@@ -314,6 +319,49 @@ You should consider upgrading via the '/opt/stack/tempest/.tox/tempest/bin/pytho
 sudo ufw allow 80/tcp
 sudo ufw allow 3306/tcp
 ``` -->
+<h1 id="使用">使用</h1>
+<h2 id="网页版">网页版</h2>
+<h3 id="开端口">开端口</h3>
+<p>本机访问跳过此步骤。</p>
+<pre><code>sudo ufw allow 80/tcp
+</code></pre>
+<h3 id="访问">访问</h3>
+<pre><code>http://192.168.127.132/dashboard
+用户名：admin 或 demo
+密码：secret
+</code></pre>
+<h2 id="命令行cli">命令行cli</h2>
+<p>当前用户为stack的情况下：</p>
+<pre><code>source ~/devstack/openrc admin admin
+
+# 查看指令清单
+openstack command list
+</code></pre>
+<h2 id="创建volume-group">创建volume group</h2>
+<p>Cinder将LVM作为默认的volume provider(backend)，查看<code>/etc/cinder/cinder.conf</code>得知已经配置了<code>lvmdriver-1</code>的volume backend，其volume group名为<code>stack-volumes-lvmdriver-1</code>。<br>
+Devstack并未创建volume group，因此需手工创建。</p>
+<h3 id="vmware添加一个scsi硬盘">vmware添加一个scsi硬盘</h3>
+<p>加好后重启验证：</p>
+<pre><code>sudo fdisk -l
+  Disk /dev/sdb: 2 GiB, 2147483648 bytes, 4194304 sectors
+</code></pre>
+<h3 id="创建physical-volume-devsdb">创建physical volume <code>/dev/sdb</code></h3>
+<pre><code>sudo pvcreate /dev/sdb
+  Physical volume &quot;/dev/sdb&quot; successfully created.
+</code></pre>
+<h3 id="创建volume-group-stack-volumes-lvmdriver-1">创建volume group <code>stack-volumes-lvmdriver-1</code></h3>
+<pre><code>sudo vgcreate stack-volumes-lvmdriver-1 /dev/sdb
+  Volume group &quot;stack-volumes-lvmdriver-1&quot; successfully created
+</code></pre>
+<h3 id="重启cinder-volume服务">重启cinder volume服务</h3>
+<p>前面都创建好了，就差重加载了。</p>
+<pre><code>sudo systemctl restart devstack@c-vol.service
+</code></pre>
+<h2 id="troubleshooting-2">Troubleshooting</h2>
+<h3 id="host-is-not-mapped-to-any-cell">Host '...' is not mapped to any cell</h3>
+<p>Controller node 上，使用stack用户执行：</p>
+<pre><code>nova-manage cell_v2 discover_hosts --verbose
+</code></pre>
 <hr>
 <p>参考链接：<br>
 <a href="https://docs.openstack.org/devstack/latest/">DevStack</a><br>
@@ -324,7 +372,8 @@ sudo ufw allow 3306/tcp
 <a href="http://git.trystack.cn/cgit">TryStack Git Mirror</a><br>
 <a href="https://docs.openstack.org/devstack/latest/guides/multinode-lab.html">Multi-Node Lab</a><br>
 <a href="https://bugs.launchpad.net/devstack/+bug/1726260">devstack fails while running ./stack.sh in master/queens in ubuntu 16.04 while starting n-cpu</a><br>
-<a href="https://www.cnblogs.com/duanxz/p/10185946.html">Linux进程被杀掉（OOM killer），查看系统日志</a></p>
+<a href="https://www.cnblogs.com/duanxz/p/10185946.html">Linux进程被杀掉（OOM killer），查看系统日志</a><br>
+<a href="https://blog.51cto.com/3241766/2328408">OpenStack报错:Host is not mapped to any cell</a></p>
 ]]></content>
     </entry>
     <entry>
