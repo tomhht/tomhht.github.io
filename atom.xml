@@ -2,13 +2,34 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://tomhht.github.io</id>
     <title>hello, world</title>
-    <updated>2020-09-27T09:45:32.982Z</updated>
+    <updated>2020-10-15T07:36:29.044Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://tomhht.github.io"/>
     <link rel="self" href="https://tomhht.github.io/atom.xml"/>
     <logo>https://tomhht.github.io/images/avatar.png</logo>
     <icon>https://tomhht.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, hello, world</rights>
+    <entry>
+        <title type="html"><![CDATA[先生，办卡吗]]></title>
+        <id>https://tomhht.github.io/post/xian-sheng-ban-qia-ma/</id>
+        <link href="https://tomhht.github.io/post/xian-sheng-ban-qia-ma/">
+        </link>
+        <updated>2020-10-15T06:44:18.000Z</updated>
+        <summary type="html"><![CDATA[<p>记一次聚会。</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>记一次聚会。</p>
+<!-- more -->
+<p>周一参加了一个饯行，组织者是前公司的一位领导，参与者是前公司的部分领导和战友们。<br><br>
+去之前，还曾犹豫，因为大部分人3、4年没见了，其中也有一直联系的关系挺亲密的伙伴。这次是为他们出国而践行，想到许久未见，他们又要迎着疫情风险出国，可能一年半载都回不来，于是很想见见他们，表达思念和关心之情。<br><br>
+常规的联系再见面已经不能表达我的兴奋，于是我计划了个突袭，想搞个惊喜。其中的一个参与者是我的眼线，他也对我的计划非常赞同，我们二人早早的就开始窃喜了。<br><br>
+结果因为一些原因，推迟了聚餐时间，而我又提前到了地点，由于一切保密，所以我也不敢直奔饭店去见组织者，于是就在外面晃了将近1个钟头。饥寒交迫的我，悟出了个道理，暗中策划太难了，计划赶不上变化。等吧。<br><br>
+其实一直也没想好我在哪个时间点什么地方，以什么方式出现会比较出彩。逡巡的过程中，不断遇到办健身卡、办剪发卡的搭讪，忽然觉得这样不错啊。<br><br>
+没想到上天还是眷顾我的，就在打定主意后没多久，我在车站见到了俩同事Z和F，两人正商量找聚会地点呢。我带着口罩，趁着夜色，划过了他们身旁，完美地没被发现。但什么时候逗他们一下呢，这个还没想好。于是先尾随二人，伺机行动。<br><br>
+“您好，办健身卡吗”熟悉的身影熟悉的声音，正是之前搭讪我的姑娘，这次她找的恰是Z。在“不办不办”的声音中，他俩继续前行。我一个箭步越过F，直奔Z，在侧后方轻拍他的胳膊：“先生，办卡吗”。他头微微侧了下，不耐烦地甩了甩胳膊，“不办不办”，然后径直前行。F也路过我继续前行。<br><br>
+还有20米就到饭店了，我三步两步紧追他俩。Z一回头发现我在后面跟着，明显意外了一下，但我能感觉到还未被识破。于是边摘口罩边说：“先生，办一张吧”，下一秒就被来了个hug。这一秒，我能清楚地感觉到，我给的是个惊喜，而不只是个惊讶。<br><br>
+后来Z说，一开始觉得声音有点像我，还跟F嘀咕了一句，紧接着看到我追上来了，心里想着“这办卡的咋了，疯了吧，还追着人办呢”。整蛊成功！</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[学会提问]]></title>
         <id>https://tomhht.github.io/post/xue-hui-ti-wen/</id>
@@ -891,25 +912,6 @@ Address 1: 10.108.142.200 httpd-svc.default.svc.cluster.local
 <hr>
 <p>参考链接：<br>
 <a href="https://www.cnblogs.com/vincenshen/p/9751193.html">https://www.cnblogs.com/vincenshen/p/9751193.html</a></p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[第一次正式开车]]></title>
-        <id>https://tomhht.github.io/post/di-yi-ci-zheng-shi-kai-che/</id>
-        <link href="https://tomhht.github.io/post/di-yi-ci-zheng-shi-kai-che/">
-        </link>
-        <updated>2020-09-05T05:44:19.000Z</updated>
-        <summary type="html"><![CDATA[<p>拿了本大半年了，昨天第一次正式开车。</p>
-]]></summary>
-        <content type="html"><![CDATA[<p>拿了本大半年了，昨天第一次正式开车。</p>
-<!-- more -->
-<p>太刺激了。画龙、剐蹭、油合离门，应有尽有。科三考了3次才过，考过后抽奖中了一个陪练机会，跟着教练开了趟易县（同练的还有其他学员）。这就是之前全部的开车经历了。<br /><br>
-昨天因为要接侄子，学校在一个鸟不拉屎的地方，约不到车，所以硬着头皮把家里的车开出来了。首先找地方掉头，光顾着看后面，结果车头蹭人家墙上了，引得人家出来检查。<br /><br>
-好不容易掉好头，跟别的车交汇，一闪躲，噌，又是一声，之前左边，这次右边。<br /><br>
-继续前行，后来想想，居然当时心态没崩。<br /><br>
-画龙前行，志玲姐姐忽然来一句右转立刻左转，我这路口到底怎么走啊，遂决定直接左转，进了左转车道等红灯，发现右转后走10米果然有左转路，WTF。左转车道硬着头皮左转完了，终于找到一个路口直接掉头，走上了康庄大道。<br /><br>
-转完了突然道路宽阔了起来，路上也没几辆车，于是let's go，4档的干活，这感觉就是乌龟爬到了兔子身上。<br /><br>
-到校后，等了几个钟头，中途又开着出去练练手，接上娃后返程的路途也算有惊无险，终于平安的运送回家。庆幸的是这一路没有倒车入库、侧方停车之类的技术活。万幸。</p>
 ]]></content>
     </entry>
 </feed>
