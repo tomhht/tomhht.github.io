@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://tomhht.github.io</id>
     <title>hello, world</title>
-    <updated>2020-10-15T07:45:07.421Z</updated>
+    <updated>2020-12-24T06:35:25.593Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://tomhht.github.io"/>
     <link rel="self" href="https://tomhht.github.io/atom.xml"/>
@@ -699,13 +699,14 @@ kubectl label nodes --all es=log
         <link href="https://tomhht.github.io/post/zui-xiao-hua-an-zhuang-centos-hou-de-she-zhi/">
         </link>
         <updated>2020-09-10T10:54:55.000Z</updated>
-        <summary type="html"><![CDATA[<p>最小化安装centos 8后的设置。</p>
+        <summary type="html"><![CDATA[<p>最小化安装后的设置。</p>
 ]]></summary>
-        <content type="html"><![CDATA[<p>最小化安装centos 8后的设置。</p>
+        <content type="html"><![CDATA[<p>最小化安装后的设置。</p>
 <!-- more -->
 <h1 id="更换国内源">更换国内源</h1>
 <p>参考<a href="/post/pei-zhi-ubuntu-he-centos-qing-hua-yuan">配置清华源</a></p>
-<h1 id="安装epel">安装epel</h1>
+<h1 id="centos">CentOS</h1>
+<h2 id="安装epel">安装epel</h2>
 <pre><code>sudo yum install epel-release
 # 更换清华源
 sudo sed -e 's!^metalink=!#metalink=!g' \
@@ -715,21 +716,54 @@ sudo sed -e 's!^metalink=!#metalink=!g' \
     -i /etc/yum.repos.d/epel.repo /etc/yum.repos.d/epel-testing.repo
 sudo yum makecache
 </code></pre>
-<h1 id="更新软件">更新软件</h1>
+<h2 id="更新软件">更新软件</h2>
 <pre><code>yum check-update
 sudo yum upgrade
 </code></pre>
-<h1 id="设置时区和ntp">设置时区和NTP</h1>
+<h2 id="设置时区和ntp">设置时区和NTP</h2>
 <pre><code>timedatectl set-timezone Asia/Shanghai
 sudo yum install chrony
 sudo systemctl enable --now chronyd
 timedatectl status
 </code></pre>
-<h1 id="自动补全">自动补全</h1>
+<h2 id="自动补全">自动补全</h2>
 <pre><code>sudo yum install bash-completion
 source ~/.bashrc
 </code></pre>
-<h1 id="配置vim">配置vim</h1>
+<h2 id="安装vim">安装vim</h2>
+<pre><code>sudo yum -y install vim
+</code></pre>
+<h2 id="安装wget">安装wget</h2>
+<pre><code>sudo yum -y install wget
+</code></pre>
+<h2 id="其他有用的记录">其他有用的记录</h2>
+<pre><code># 找程序所属的包
+yum whatprovides netstat
+</code></pre>
+<h1 id="ubuntu">Ubuntu</h1>
+<h2 id="增加sudo权限">增加sudo权限</h2>
+<pre><code>su - root
+usermod -aG sudo username
+</code></pre>
+<h2 id="更新软件-2">更新软件</h2>
+<pre><code>sudo apt update
+sudo apt upgrade
+</code></pre>
+<h2 id="安装vim-2">安装vim</h2>
+<pre><code>sudo apt install vim
+</code></pre>
+<h2 id="安装ufw">安装ufw</h2>
+<pre><code>sudo apt install ufw
+sudo ufw enable
+sudo ufw allow ssh
+sudo ufw status
+</code></pre>
+<h1 id="通用">通用</h1>
+<h2 id="配置开机进入命令行模式">配置开机进入命令行模式</h2>
+<pre><code>sudo systemctl set-default multi-user.target
+sudo reboot
+</code></pre>
+<h2 id="配置vim">配置vim</h2>
 <pre><code>sudo vim /etc/vim/vimrc.local
 # 粘贴下面的内容进去
 set showcmd
@@ -757,13 +791,6 @@ filetype indent on
 filetype on
 </code></pre>
 <p>保存后，执行<code>source /etc/vim/vimrc</code>。</p>
-<h1 id="安装wget">安装wget</h1>
-<pre><code>sudo yum -y install wget
-</code></pre>
-<h1 id="其他有用的记录">其他有用的记录</h1>
-<pre><code># 找程序所属的包
-yum whatprovides netstat
-</code></pre>
 <hr>
 <p>参考链接：<br>
 <a href="https://www.cnblogs.com/fengdejiyixx/p/11592417.html">Centos和Ubuntu系统最小化安装基础命令</a><br>
