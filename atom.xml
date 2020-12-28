@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://tomhht.github.io</id>
     <title>hello, world</title>
-    <updated>2020-12-24T06:35:25.593Z</updated>
+    <updated>2020-12-28T09:40:18.545Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://tomhht.github.io"/>
     <link rel="self" href="https://tomhht.github.io/atom.xml"/>
@@ -706,6 +706,11 @@ kubectl label nodes --all es=log
 <h1 id="更换国内源">更换国内源</h1>
 <p>参考<a href="/post/pei-zhi-ubuntu-he-centos-qing-hua-yuan">配置清华源</a></p>
 <h1 id="centos">CentOS</h1>
+<h2 id="增加sudo权限">增加sudo权限</h2>
+<pre><code>su - root
+usermod -aG wheel username
+su - username
+</code></pre>
 <h2 id="安装epel">安装epel</h2>
 <pre><code>sudo yum install epel-release
 # 更换清华源
@@ -741,9 +746,10 @@ source ~/.bashrc
 yum whatprovides netstat
 </code></pre>
 <h1 id="ubuntu">Ubuntu</h1>
-<h2 id="增加sudo权限">增加sudo权限</h2>
+<h2 id="增加sudo权限-2">增加sudo权限</h2>
 <pre><code>su - root
 usermod -aG sudo username
+su - username
 </code></pre>
 <h2 id="更新软件-2">更新软件</h2>
 <pre><code>sudo apt update
