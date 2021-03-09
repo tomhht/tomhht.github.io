@@ -2,13 +2,13 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://tomhht.github.io</id>
     <title>hello, world</title>
-    <updated>2020-12-28T09:40:18.545Z</updated>
+    <updated>2021-03-09T08:17:25.498Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://tomhht.github.io"/>
     <link rel="self" href="https://tomhht.github.io/atom.xml"/>
     <logo>https://tomhht.github.io/images/avatar.png</logo>
     <icon>https://tomhht.github.io/favicon.ico</icon>
-    <rights>All rights reserved 2020, hello, world</rights>
+    <rights>All rights reserved 2021, hello, world</rights>
     <entry>
         <title type="html"><![CDATA[先生，办卡吗]]></title>
         <id>https://tomhht.github.io/post/xian-sheng-ban-qia-ma/</id>
