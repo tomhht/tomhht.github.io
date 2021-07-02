@@ -2,13 +2,37 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://tomhht.github.io</id>
     <title>hello, world</title>
-    <updated>2021-07-02T11:03:31.647Z</updated>
+    <updated>2021-07-02T11:13:06.868Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://tomhht.github.io"/>
     <link rel="self" href="https://tomhht.github.io/atom.xml"/>
     <logo>https://tomhht.github.io/images/avatar.png</logo>
     <icon>https://tomhht.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, hello, world</rights>
+    <entry>
+        <title type="html"><![CDATA[安装electron quick start遇到无法从taobao镜像下载的问题]]></title>
+        <id>https://tomhht.github.io/post/an-zhuang-electron-quick-start-yu-dao-wu-fa-cong-taobao-jing-xiang-xia-zai-de-wen-ti/</id>
+        <link href="https://tomhht.github.io/post/an-zhuang-electron-quick-start-yu-dao-wu-fa-cong-taobao-jing-xiang-xia-zai-de-wen-ti/">
+        </link>
+        <updated>2021-07-02T10:46:29.000Z</updated>
+        <summary type="html"><![CDATA[<p>npm install时，提示 https://https://registry.npm.taobao.org/@types/node/-/node-14.17.4.tgz 404。</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>npm install时，提示 https://https://registry.npm.taobao.org/@types/node/-/node-14.17.4.tgz 404。</p>
+<!-- more -->
+<p>发现<code>package-lock.json</code>中，有这样一段：</p>
+<pre><code>&quot;node_modules/@types/node&quot;: {
+      &quot;version&quot;: &quot;14.17.4&quot;,
+      &quot;resolved&quot;: &quot;https://registry.npmjs.org/@types/node/-/node-14.17.4.tgz&quot;,
+      &quot;integrity&quot;: &quot;sha512-8kQ3+wKGRNN0ghtEn7EGps/B8CzuBz1nXZEIGGLP2GnwbqYn4dbTs7k+VKLTq1HvZLRCIDtN3Snx1Ege8B7L5A==&quot;,
+      &quot;dev&quot;: true,
+      &quot;license&quot;: &quot;MIT&quot;
+    },
+</code></pre>
+<p>Google半天也没找到类似问题，最终通过更换华为云镜像方式解决。</p>
+<pre><code>npm config set registry https://mirrors.huaweicloud.com/repository/npm
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Sonos]]></title>
         <id>https://tomhht.github.io/post/sonos/</id>
@@ -888,38 +912,6 @@ source ~/.bashrc #使配置立刻生效
 <p>参考链接：<br>
 <a href="https://helm.sh/">Helm官方</a><br>
 <a href="https://kuricat.com/gist/snap-install-too-slow-zmbjy">snap install 过慢 的解决方法 @Kurisu</a></p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[k8s测试mysql挂载nfs遇到的问题]]></title>
-        <id>https://tomhht.github.io/post/pei-zhi-nfs/</id>
-        <link href="https://tomhht.github.io/post/pei-zhi-nfs/">
-        </link>
-        <updated>2020-09-06T07:50:41.000Z</updated>
-        <summary type="html"><![CDATA[<p>学习nfs的配置，并测试k8s部署mysql挂载nfs的方式。</p>
-]]></summary>
-        <content type="html"><![CDATA[<p>学习nfs的配置，并测试k8s部署mysql挂载nfs的方式。</p>
-<!-- more -->
-<h1 id="配置nfs">配置nfs</h1>
-<h2 id="ubuntu">Ubuntu</h2>
-<p>先将参考链接放这儿。<a href="https://www.digitalocean.com/community/tutorials/how-to-set-up-an-nfs-mount-on-ubuntu-20-04">How To Set Up an NFS Mount on Ubuntu 20.04</a></p>
-<h2 id="centos">CentOS</h2>
-<p><a href="https://qizhanming.com/blog/2018/08/08/how-to-install-nfs-on-centos-7">CentOS 7 下 yum 安装和配置 NFS</a></p>
-<h1 id="k8s测试遇到的问题">k8s测试遇到的问题</h1>
-<h2 id="镜像pull不下来">镜像pull不下来</h2>
-<p><strong>问题描述</strong><br>
-测试mysql挂载nfs失败了n次，一开始是镜像pull不下来。<br>
-<strong>解决</strong><br>
-后来添加阿里云加速器后重启node上的docker <code>sudo systemctl restart docker.service</code>解决了pull的问题。</p>
-<h2 id="pod遇到backoff的错误">pod遇到backoff的错误</h2>
-<p><strong>问题描述</strong><br>
-pull下来了还是运行失败，pod总是显示backoff <code>Back-off restarting failed container</code>的错误，通过<code>kubectl logs &lt;mysql pod的名字&gt;</code>发现<code>chown: changing ownership of '/var/lib/mysql/': Operation not permitted</code>错误。<br>
-<strong>解决</strong><br>
-nfs配置文件<code>/etc/exports</code>里，加上了<code>no_root_squash</code>的选项。</p>
-<hr>
-<p>参考链接：<br>
-<a href="https://www.digitalocean.com/community/tutorials/how-to-set-up-an-nfs-mount-on-ubuntu-20-04">How To Set Up an NFS Mount on Ubuntu 20.04</a><br>
-<a href="https://qizhanming.com/blog/2018/08/08/how-to-install-nfs-on-centos-7">CentOS 7 下 yum 安装和配置 NFS</a></p>
 ]]></content>
     </entry>
 </feed>
