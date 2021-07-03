@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://tomhht.github.io</id>
     <title>hello, world</title>
-    <updated>2021-07-02T11:13:06.868Z</updated>
+    <updated>2021-07-03T07:47:31.932Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://tomhht.github.io"/>
     <link rel="self" href="https://tomhht.github.io/atom.xml"/>
@@ -15,9 +15,9 @@
         <link href="https://tomhht.github.io/post/an-zhuang-electron-quick-start-yu-dao-wu-fa-cong-taobao-jing-xiang-xia-zai-de-wen-ti/">
         </link>
         <updated>2021-07-02T10:46:29.000Z</updated>
-        <summary type="html"><![CDATA[<p>npm install时，提示 https://https://registry.npm.taobao.org/@types/node/-/node-14.17.4.tgz 404。</p>
+        <summary type="html"><![CDATA[<p>npm install时，提示 https://registry.npm.taobao.org/@types/node/-/node-14.17.4.tgz 404。</p>
 ]]></summary>
-        <content type="html"><![CDATA[<p>npm install时，提示 https://https://registry.npm.taobao.org/@types/node/-/node-14.17.4.tgz 404。</p>
+        <content type="html"><![CDATA[<p>npm install时，提示 https://registry.npm.taobao.org/@types/node/-/node-14.17.4.tgz 404。</p>
 <!-- more -->
 <p>发现<code>package-lock.json</code>中，有这样一段：</p>
 <pre><code>&quot;node_modules/@types/node&quot;: {
